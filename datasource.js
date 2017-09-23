@@ -62,11 +62,20 @@ app.post('/newArticle', function(req, res) {
   res.sendStatus(200);
 })
 
-// Accepts the uid of an article as a query parameter and removes that article from the closet.
+// Accepts the uid of an article as a query parameter and removes that article from the closet, and removes all saved outfits with that article.
 app.delete('/removeArticle', function(req, res) {
   var id = req.query.uid;
 
   database.ref('closet/' + id).remove();
+
+  database.ref('outfits').once('value', function(outfits){
+    outfits.forEach(function(outfit){
+      if (outfit.val()[0]['uid'] == id || outfit.val()[1]['uid'] == id)
+      {
+        database.ref('outfits/'+outfit.key).remove();
+      }
+    });
+  });
 
   res.sendStatus(200);
 })
