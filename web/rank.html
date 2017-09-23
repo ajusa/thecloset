@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="aj.min.css">
     <link rel="stylesheet" href="sweetalert2.min.css">
     <link rel="stylesheet" href="font/flaticon.css">
+    <link rel="stylesheet" href="spectre-icons.min.css">
     <script src="vue.js"></script>
     <script src="vue-resource.js"></script>
     <script src="fuse.js"></script>
@@ -23,22 +24,22 @@
 
 <body>
     <div id="app">
-        <header class="navbar ph2 pv3 bg-near-white">
-            <section class="fl">
+        <header class="navbar p2 bg-near-white">
+            <section class="fl container">
                 <a href="#" class="btn btn-link tracked b dib">
-                    <span class="purple">The Closet</span>
+                    <span class="purple ttu ">The Closet</span>
                 </a>
         </header>
         <div class="container">
             <div class="row pt3 cf">
                 <div class="four columns pb4">
-                    <div class="p3 dim" onclick="location.href='/closet.html'">
+                    <div class="p3 dim hand" onclick="location.href='/closet.html'">
                         Closet Items
                     </div>
-                    <div class="p3 dim bg-primary white">
+                    <div class="p3 dim bg-primary white hand">
                         Rank Styles
                     </div>
-                    <div class="p3 dim">
+                    <div class="p3 dim hand">
                         What do I wear?
                     </div>
                 </div>
@@ -48,12 +49,12 @@
                     <div class="row cf" v-for="row in allOutfits">
                         <div class="four columns tc" v-for="outfit in row">
                             <div class="card p3 mv2 mw6">
-                                <h4>Outfit</h4>
                                 <div v-for="article in outfit.sort(function(a,b){if(a.pos=='bottom'){return 1} else return -1})">
                                     <div :style="'font-size: 5rem;color:'+article.color" :class="parsedArticle(article.type).icon"></div>
                                 </div>
                                 <br>
-                                <button class="btn-primary mh2" @click="newOutfit(outfit, true)">Like</button> <button class="btn-primary mh2" @click="newOutfit(outfit, false)">Dislike</button>
+                                <i class="icon icon-arrow-up primary hand f4 mh2" @click="newOutfit(outfit, true)"></i>
+                                <i class="icon icon-arrow-down primary hand f4 mh2" @click="newOutfit(outfit, false)"></i>
                             </div>
                         </div>
                     </div>
@@ -118,7 +119,7 @@ var app = new Vue({
         newOutfit: function(outfit, like) {
             var self = this;
             url = ""
-            if(like){
+            if (like) {
                 url = "http://35.3.111.174:3000/likeOutfit"
             } else {
                 url = "http://35.3.111.174:3000/dislikeOutfit"
