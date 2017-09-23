@@ -2,6 +2,8 @@ const express = require('express')
 const firebase = require('firebase')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const request = require('request');
+
 
 // Initialize Express
 const app = express()
@@ -20,13 +22,13 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
-var bottoms = ["jeans"]; //types of clothing considered bottom
+var bottoms = ["jeans", "shorts"]; //types of clothing considered bottom
 var tops = ["t-shirt", "jacket"]; //types of clothing considered top
 
 
 // Express routing
 // Homepage is redirected to getCloset
-app.get('/', function (req, res){
+app.get('/', function(req, res) {
   res.redirect('/getCloset');
 })
 
@@ -49,11 +51,10 @@ app.get('/getCloset', function(req, res) {
 app.post('/newArticle', function(req, res) {
   var article = req.body;
   var newPostKey = database.ref().child('closet').push().key;
-
   if (bottoms.indexOf(article.type) != -1) {
-    article.pos = "bottom";
+    article['pos'] = "bottom";
   } else if (tops.indexOf(article.type) != -1) {
-    article.pos = "top";
+    article['pos'] = "top";
   }
 
   database.ref('closet/' + newPostKey).set(article);
@@ -62,7 +63,7 @@ app.post('/newArticle', function(req, res) {
 })
 
 // Accepts the uid of an article as a query parameter and removes that article from the closet.
-app.delete('/removeArticle', function (req, res){
+app.delete('/removeArticle', function(req, res) {
   var id = req.query.uid;
 
   database.ref('closet/' + id).remove();
@@ -70,17 +71,30 @@ app.delete('/removeArticle', function (req, res){
   res.sendStatus(200);
 })
 
-// Takes a new outfit and posts it to the database.
+// Takes a new outfit and posts it to the database, then posts it to the Flask AI server.
 app.post('/newOutfit', function(req, res) {
-  var outfit = req.body;
-  var newPostKey = database.ref().child('outfits').push().key;
+      var outfit = req.body;
+      var newPostKey = database.ref().child('outfits').push().key;
 
-  database.ref('outfits/' + newPostKey).set(outfit);
+      database.ref('outfits/' + newPostKey).set(outfit);
 
-  res.sendStatus(200);
-})
+      //35.3.12.61
+      request({
+          url: 'http://35.3.12.61:5000/getOutfits',
+          method: "POST",
+          json: outfit
+        }, function(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            res.status(response.statusCode).json(body);
+          } else {
+            {
+              res.sendStatus(response.statusCode);
+            }
+          }
+        }
+      })
 
-// The server is started.
-app.listen(3000, function() {
-  console.log('Server started at port 3000')
-})
+    // The server is started.
+    app.listen(3000, function() {
+      console.log('Server started at port 3000')
+    })
