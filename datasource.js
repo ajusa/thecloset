@@ -82,9 +82,11 @@ app.delete('/removeArticle', function(req, res) {
         res.sendStatus(200);
       })
 
+      // Lexie's IP: 35.3.12.61
+      // Arham: 35.3.66.193 
       app.get('/getOutfits', function(req, res) {
         request({
-          url: 'http://35.3.12.61:5000/getOutfits',
+          url: 'http://35.3.66.193:5000/getOutfits',
           method: "GET",
         }, function(error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -105,7 +107,7 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
-          url: 'http://35.3.12.61:5000/giveGoodOutfit',
+          url: 'http://35.3.66.193:5000/giveGoodOutfit',
           method: "POST",
           json: outfit
         }, function(error, response, body) {
@@ -127,7 +129,7 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
-          url: 'http://35.3.12.61:5000/giveBadOutfit',
+          url: 'http://35.3.66.193:5000/giveBadOutfit',
           method: "POST",
           json: outfit
         }, function(error, response, body) {
