@@ -110,7 +110,7 @@ var app = new Vue({
         updateOutfits: function() {
             var self = this;
             this.$http.get("/getOutfits").then(function(resp) {
-                self.allOutfits = resp.body.reverse().chunk(3)
+                self.allOutfits = JSON.parse(resp.body).reverse().chunk(3)
             })
         },
         parsedArticle: function(type) {
@@ -125,14 +125,15 @@ var app = new Vue({
                 url = "/dislikeOutfit"
             }
 
-            this.$http.post(url, outfit).then(function() {
+            this.$http.post(url, outfit).then(function(resp) {
                 swal("Form Submitted")
                 swal(
                     'Success!',
                     'You added an outfit',
                     'success'
                 )
-                self.updateOutfits()
+                console.log(resp.body)
+                self.allOutfits = JSON.parse(resp.body).reverse().chunk(3)
             }, function() {
                 swal(
                     'Oops...',
