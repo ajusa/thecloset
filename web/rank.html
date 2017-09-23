@@ -26,8 +26,8 @@
         <div class="container">
             <div class="row pt3 cf">
                 <div class="four columns pb4">
-                    <div class="p3 dim">
-                        Add Closet Items
+                    <div class="p3 dim" onclick="location.href='/closet.html'">
+                        Closet Items
                     </div>
                     <div class="p3 dim bg-primary white">
                         Rank Styles
@@ -43,11 +43,11 @@
                         <div class="four columns">
                             <div class="card p3 mv2 mw6">
                                 <h4>Outfit</h4>
-                                <div v-for="article in outfits.sort(function(a,b){if(a.pos=='bottom')})">
+                                <div v-for="article in outfits.sort(function(a,b){if(a.pos=='bottom'){return -1} else return 1})">
                                     <div :style="'font-size: 5rem;color:'+article.parsedColor" :class="parsedArticle(article.type).icon"></div>
                                 </div>
                                 <br>
-                                <button class="btn-primary mh2">Like</button><button class="btn mh2">Not Like</button>
+                                <button class="btn-primary mh2" @click="">Like</button>
                             </div>
                         </div>
                         <div class="four columns"></div>
