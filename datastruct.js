@@ -29,9 +29,22 @@ app.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
+app.get('/getCloset', function (req, res){
+  var json_closet = {};
+  var array_closet = [];
+
+  database.ref('closet').once('value', function(snapshot) {
+  snapshot.forEach(function(childSnapshot) {
+    console.log(childSnapshot.val());
+    array_closet.push(childSnapshot.val());
+  });
+  res.send(array_closet);
+});
+})
+
 app.post('/newArticle', function (req, res) {
   var article = req.body;
-  var newPostKey = database.ref().child('posts').push().key;
+  var newPostKey = database.ref().child('closet').push().key;
 
   if (bottoms.indexOf(article.type) != -1)
   {
@@ -44,9 +57,17 @@ app.post('/newArticle', function (req, res) {
   database.ref('closet/' + newPostKey).set(article);
 
   res.sendStatus(200);
-  console.log("success!");
+})
+
+app.post('/newOutfit', function (req, res){
+  var outfit = req.body;
+  var newPostKey = database.ref().child('outfits').push().key;
+
+  database.ref('outfits/' + newPostKey).set(outfit);
+
+  res.sendStatus(200);
 })
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
+  console.log('Server listening at port 3000')
 })
