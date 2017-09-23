@@ -46,7 +46,7 @@
                     <h3>Rank Styles</h3>
                     <p>You can see potential outfits here and rank them based on how much you like them. </p>
                     <div class="row cf" v-for="row in allOutfits">
-                        <div class="four columns" v-for="outfit in row">
+                        <div class="four columns tc" v-for="outfit in row">
                             <div class="card p3 mv2 mw6">
                                 <h4>Outfit</h4>
                                 <div v-for="article in outfit.sort(function(a,b){if(a.pos=='bottom'){return 1} else return -1})">
@@ -108,7 +108,7 @@ var app = new Vue({
         },
         updateOutfits: function() {
             var self = this;
-            this.$http.get("http://localhost:3000/getOutfits").then(function(resp) {
+            this.$http.get("http://35.3.111.174:3000/getOutfits").then(function(resp) {
                 self.allOutfits = resp.body.reverse().chunk(3)
             })
         },
@@ -119,9 +119,9 @@ var app = new Vue({
             var self = this;
             url = ""
             if(like){
-                url = "http://localhost:3000/likeOutfit"
+                url = "http://35.3.111.174:3000/likeOutfit"
             } else {
-                url = "http://localhost:3000/dislikeOutfit"
+                url = "http://35.3.111.174:3000/dislikeOutfit"
             }
 
             this.$http.post(url, outfit).then(function() {

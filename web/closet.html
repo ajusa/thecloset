@@ -72,7 +72,7 @@
                     </div>
                     <br>
                     <div class="row cf" v-for="row in allArticles">
-                        <div class="four columns" v-for="article in row">
+                        <div class="four columns tc" v-for="article in row">
                             <div class="card p3 mv2 mw6">
                                 <h4>{{article.style.join(", ")}}</h4>
                                 <div :style="'font-size: 5rem;color:'+article.color" :class="parseArticle(article.type).icon"></div>
