@@ -30,13 +30,16 @@ app.get('/', function (req, res){
   res.redirect('/getCloset');
 })
 
-// Gets the entire closet of clothes and parses it into a JSON array.
+// Gets the entire closet of clothes and parses it into a JSON array, adding the uid of the article as an attribute.
 app.get('/getCloset', function(req, res) {
   var closet_array = [];
 
   database.ref('closet').once('value', function(closet) {
     closet.forEach(function(article) {
-      closet_array.push(article.val());
+      var articleJSON = article.val();
+      var key = article.key;
+      articleJSON['uid'] = key;
+      closet_array.push(articleJSON);
     });
     res.send(closet_array);
   });
@@ -54,6 +57,15 @@ app.post('/newArticle', function(req, res) {
   }
 
   database.ref('closet/' + newPostKey).set(article);
+
+  res.sendStatus(200);
+})
+
+// Accepts the uid of an article as a query parameter and removes that article from the closet.
+app.delete('/removeArticle', function (req, res){
+  var id = req.query.uid;
+
+  database.ref('closet/' + id).remove();
 
   res.sendStatus(200);
 })
