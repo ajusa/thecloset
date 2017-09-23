@@ -148,7 +148,7 @@ var app = new Vue({
         },
         updateArticles: function() {
             var self = this;
-            this.$http.get("http://35.3.111.174:3000/getCloset").then(function(resp) {
+            this.$http.get("/getCloset").then(function(resp) {
                 self.allArticles = resp.body.reverse().chunk(3)
             })
         },
@@ -157,7 +157,7 @@ var app = new Vue({
         },
         removeArticle: function(uid) {
             var self = this
-            this.$http.delete("http://35.3.111.174:3000/removeArticle?uid=" + uid).then(function(resp) {
+            this.$http.delete("/removeArticle?uid=" + uid).then(function(resp) {
                 self.updateArticles()
                 swal("Article of Clothing removed from Closet")
             })
@@ -170,7 +170,7 @@ var app = new Vue({
                 weathers: [],
             }
             var self = this;
-            this.$http.post('http://35.3.111.174:3000/newArticle', test).then(function() {
+            this.$http.post('/newArticle', test).then(function() {
                 swal("Form Submitted")
                 swal(
                     'Success!',

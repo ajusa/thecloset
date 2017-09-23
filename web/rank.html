@@ -109,7 +109,7 @@ var app = new Vue({
         },
         updateOutfits: function() {
             var self = this;
-            this.$http.get("http://35.3.111.174:3000/getOutfits").then(function(resp) {
+            this.$http.get("/getOutfits").then(function(resp) {
                 self.allOutfits = resp.body.reverse().chunk(3)
             })
         },
@@ -120,9 +120,9 @@ var app = new Vue({
             var self = this;
             url = ""
             if (like) {
-                url = "http://35.3.111.174:3000/likeOutfit"
+                url = "/likeOutfit"
             } else {
-                url = "http://35.3.111.174:3000/dislikeOutfit"
+                url = "/dislikeOutfit"
             }
 
             this.$http.post(url, outfit).then(function() {
