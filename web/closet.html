@@ -15,12 +15,12 @@
     <script src="fuse.js"></script>
     <script src="sweetalert2.min.js"></script>
     <script src="one-color.js"></script>
-
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
     <style>
-        body{
-            font-family: "Roboto"
-        }
+    body {
+        font-family: "Roboto"
+    }
     </style>
 </head>
 
@@ -47,7 +47,7 @@
                 </div>
                 <div class="eight columns">
                     <h3>Add items</h3>
-                    <p>You can add items of clothing that are in your closet. Simply type in the <a href="http://colours.neilorangepeel.com/">color</a> of the clothing, the type (shorts, jeans, t-shirt), and what styles you are comfortable wearing it (formal, fitness, casual).</p>
+                    <p>Add clothes that you own. Simply type in the <a href="http://colours.neilorangepeel.com/">color</a> of the clothing, the type (shorts, jeans, t-shirt), andthe styles you wear it (formal, fitness, casual).</p>
                     <div class="row cf">
                         <div class="four columns">
                             <input type="text" placeholder="Article" v-model="article">
@@ -67,7 +67,7 @@
                             <br>
                         </div>
                     </div>
-                    <div class="card p3 mv2 mw6" v-if="style.length>0||parsedColor||parsedArticle">
+                    <div class="card p3 mv2 tc mw6" v-if="style.length>0||parsedColor||parsedArticle">
                         <h4>{{style.join(", ")}}</h4>
                         <div :style="'font-size: 5rem;color:'+parsedColor" :class="get(parsedArticle, 'icon')"></div>
                         <button class="btn-primary" v-if="style.length>0&&parsedColor&&parsedArticle" @click="submit">Add Outfit</button>
@@ -76,7 +76,6 @@
                     <div class="row cf" v-for="row in allArticles">
                         <div class="four columns tc" v-for="article in row">
                             <div class="card p3 mv2 mw6">
-                                
                                 <div :style="'font-size: 5rem;color:'+article.color" :class="parseArticle(article.type).icon"></div>
                                 <p class="silver">{{article.style.join(" | ")}}</p>
                                 <i class="icon icon-cross f4 red mh2 hand" @click="removeArticle(article.uid)">Delete</i>
@@ -149,12 +148,12 @@ var app = new Vue({
                 self.allArticles = resp.body.reverse().chunk(3)
             })
         },
-         parseArticle: function(type) {
+        parseArticle: function(type) {
             return new Fuse(this.articles, { keys: ["name"] }).search(type)[0]; // "list" is the item array
         },
-        removeArticle: function(uid){
+        removeArticle: function(uid) {
             var self = this
-            this.$http.delete("http://35.3.111.174:3000/removeArticle?uid="+uid).then(function(resp) {
+            this.$http.delete("http://35.3.111.174:3000/removeArticle?uid=" + uid).then(function(resp) {
                 self.updateArticles()
                 swal("Article of Clothing removed from Closet")
             })
