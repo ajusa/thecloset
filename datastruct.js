@@ -1,3 +1,11 @@
+const express = require('express')
+const firebase = require('firebase')
+const bodyParser = require('body-parser')
+
+
+const app = express()
+app.use(bodyParser.json()); // for parsing application/json
+
 // Initialize Firebase
   var config = {
     apiKey: "AIzaSyBzX7gVYuZzocDLN1fdCfbVCfYYm2xTzow",
@@ -22,6 +30,17 @@ var test = {
 
 var newPostKey = database.ref().child('posts').push().key;
 
-database.ref('closet/' + newPostKey).set(test);
+//database.ref('closet/' + newPostKey).set(test);
 
-database.ref()
+app.get('/', function (req, res) {
+  res.send('Hello World!')
+})
+
+app.post('/newArticle', function (req, res) {
+
+  res.sendStatus(200);
+})
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!')
+})
