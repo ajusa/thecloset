@@ -87,30 +87,16 @@ app.delete('/removeArticle', function(req, res) {
       })
 
       app.get('/getOutfits', function(req, res) {
-        var outfits = [
-          [{
-            type: "shorts",
-            pos: "bottom",
-            color: "#0000ff",
-            style: ["fitness"]
-          }, {
-            type: "jacket",
-            pos: "top",
-            color: "#008888",
-            style: ["fitness"]
-          }],
-          [{
-            type: "jeans",
-            pos: "bottom",
-            color: "#000066",
-            style: ["casual"]
-          }, {
-            type: "t-shirt",
-            pos: "top",
-            color: "#003300",
-            style: ["casual"]
-          }]
-        ]
+        request({
+          url: 'http://35.3.12.61:5000/getOutfits',
+          method: "GET",
+        }, function(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            res.status(response.statusCode).json(body);
+          } else {
+            {
+              res.sendStatus(418);
+            });
         res.send(outfits);
       })
 
