@@ -86,7 +86,11 @@ app.delete('/removeArticle', function(req, res) {
       // Arham: 35.3.66.193 
       app.get('/getOutfits', function(req, res) {
         request({
+<<<<<<< HEAD
           url: 'http://35.3.66.193:5000/getOutfits',
+=======
+          url: 'http://127.0.0.1:5000/getOutfits',
+>>>>>>> d10cfcbea969888f033ae31f825bd64ccf12ce36
           method: "GET",
         }, function(error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -107,7 +111,11 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
+<<<<<<< HEAD
           url: 'http://35.3.66.193:5000/giveGoodOutfit',
+=======
+          url: 'http://127.0.0.1:5000/giveGoodOutfit',
+>>>>>>> d10cfcbea969888f033ae31f825bd64ccf12ce36
           method: "POST",
           json: outfit
         }, function(error, response, body) {
@@ -129,7 +137,11 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
+<<<<<<< HEAD
           url: 'http://35.3.66.193:5000/giveBadOutfit',
+=======
+          url: 'http://127.0.0.1:5000/giveBadOutfit',
+>>>>>>> d10cfcbea969888f033ae31f825bd64ccf12ce36
           method: "POST",
           json: outfit
         }, function(error, response, body) {

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Dressr</title>
+    <title>The Closet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="aj.min.css">
     <link rel="stylesheet" href="sweetalert2.min.css">
@@ -27,7 +27,7 @@
         <header class="navbar p2 bg-near-white">
             <section class="fl container">
                 <a href="#" class="btn btn-link tracked b dib">
-                    <span class="purple ttu ">Dressr</span>
+                    <span class="purple ttu ">The Closet</span>
                 </a>
         </header>
         <div class="container">
@@ -36,10 +36,10 @@
                     <div class="p3 dim hand" onclick="location.href='/index.html'">
                         Closet Items
                     </div>
-                    <div class="p3 dim bg-primary white hand">
+                    <div class="p3 dim  hand" onclick="location.href='/rank.html'">
                         Rank Styles
                     </div>
-                    <div class="p3 dim hand" onclick="location.href='/what.html'">
+                    <div class="p3 dim bg-primary white hand">
                         What do I wear?
                     </div>
                 </div>
@@ -110,7 +110,7 @@ var app = new Vue({
         updateOutfits: function() {
             var self = this;
             this.$http.get("/getOutfits").then(function(resp) {
-                self.allOutfits = JSON.parse(resp.body).reverse().chunk(3)
+                self.allOutfits = resp.body.reverse().chunk(3)
             })
         },
         parsedArticle: function(type) {
@@ -125,15 +125,14 @@ var app = new Vue({
                 url = "/dislikeOutfit"
             }
 
-            this.$http.post(url, outfit).then(function(resp) {
+            this.$http.post(url, outfit).then(function() {
                 swal("Form Submitted")
                 swal(
                     'Success!',
                     'You added an outfit',
                     'success'
                 )
-                console.log(resp.body)
-                self.allOutfits = JSON.parse(resp.body).reverse().chunk(3)
+                self.updateOutfits()
             }, function() {
                 swal(
                     'Oops...',
