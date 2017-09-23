@@ -13,10 +13,10 @@
 var database = firebase.database();
 
 var test = {
-  type: "shorts",
+  type: "jeans",
   pos: "bottom",
-  color: "#FF0044",
-  style: ["casual", "fitness"],
+  color: "#800080",
+  style: ["casual", "fancy"],
   weathers: [],
 }
 
