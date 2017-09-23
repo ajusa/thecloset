@@ -71,30 +71,30 @@ app.delete('/removeArticle', function(req, res) {
   res.sendStatus(200);
 })
 
-// Takes a new outfit and posts it to the database, then posts it to the Flask AI server.
+// Takes a new outfit and posts it to the database, then posts it to the Flask AI.
 app.post('/newOutfit', function(req, res) {
-      var outfit = req.body;
-      var newPostKey = database.ref().child('outfits').push().key;
+  var outfit = req.body;
+  var newPostKey = database.ref().child('outfits').push().key;
 
-      database.ref('outfits/' + newPostKey).set(outfit);
+  database.ref('outfits/' + newPostKey).set(outfit);
 
-      //35.3.12.61
-      request({
-          url: 'http://35.3.12.61:5000/getOutfits',
-          method: "POST",
-          json: outfit
-        }, function(error, response, body) {
-          if (!error && response.statusCode == 200) {
-            res.status(response.statusCode).json(body);
-          } else {
-            {
-              res.sendStatus(response.statusCode);
-            }
-          }
-        }
-      })
+  //35.3.12.61
+  request({
+    url: 'http://35.3.12.61:5000/getOutfits',
+    method: "POST",
+    json: outfit
+  }, function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      res.status(response.statusCode).json(body);
+    } else {
+      {
+        res.sendStatus(500);
+      }
+    }
+  });
+})
 
-    // The server is started.
-    app.listen(3000, function() {
-      console.log('Server started at port 3000')
-    })
+// The server is started.
+app.listen(3000, function() {
+  console.log('Server started at port 3000')
+})
