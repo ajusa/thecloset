@@ -80,16 +80,21 @@ app.delete('/removeArticle', function(req, res) {
   res.sendStatus(200);
 })
 
+app.get('/getOutfits', function(req, res){
+  var outfits = [[{type:"shorts", pos:"bottom", color:"#0000ff", style:["fitness"]},{type:"jacket", pos:"top", color:"#008888", style:["fitness"]}],[{type:"jeans", pos:"bottom", color:"#000066", style:["casual"]},{type:"t-shirt", pos:"top", color:"#003300", style:["casual"] }]]
+  res.send(outfits);
+})
+
 // Takes a new outfit and posts it to the database, then posts it to the Flask AI.
-app.post('/newOutfit', function(req, res) {
+app.post('/likeOutfit', function(req, res) {
   var outfit = req.body;
   var newPostKey = database.ref().child('outfits').push().key;
 
-  database.ref('outfits/' + newPostKey).set(outfit);
+  database.ref('goodOutfits/' + newPostKey).set(outfit);
 
   //35.3.12.61
   request({
-    url: 'http://35.3.12.61:5000/getOutfits',
+    url: 'http://35.3.12.61:5000/giveGoodOutfit',
     method: "POST",
     json: outfit
   }, function(error, response, body) {
@@ -97,7 +102,29 @@ app.post('/newOutfit', function(req, res) {
       res.status(response.statusCode).json(body);
     } else {
       {
-        res.sendStatus(500);
+        res.sendStatus(418);
+      }
+    }
+  });
+})
+
+app.post('/dislikeOutfit', function(req, res) {
+  var outfit = req.body;
+  var newPostKey = database.ref().child('outfits').push().key;
+
+  database.ref('badOutfits/' + newPostKey).set(outfit);
+
+  //35.3.12.61
+  request({
+    url: 'http://35.3.12.61:5000/giveBadOutfit',
+    method: "POST",
+    json: outfit
+  }, function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      res.status(response.statusCode).json(body);
+    } else {
+      {
+        res.sendStatus(418);
       }
     }
   });
