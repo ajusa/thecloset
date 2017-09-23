@@ -53,7 +53,7 @@
                                     <div :style="'font-size: 5rem;color:'+article.color" :class="parsedArticle(article.type).icon"></div>
                                 </div>
                                 <br>
-                                <button class="btn-primary mh2" @click="newOutfit(outfit)">Like</button>
+                                <button class="btn-primary mh2" @click="newOutfit(outfit, true)">Like</button> <button class="btn-primary mh2" @click="newOutfit(outfit, false)">Dislike</button>
                             </div>
                         </div>
                     </div>
@@ -115,9 +115,16 @@ var app = new Vue({
         parsedArticle: function(type) {
             return new Fuse(this.articles, { keys: ["name"] }).search(type)[0]; // "list" is the item array
         },
-        newOutfit: function(outfit) {
+        newOutfit: function(outfit, like) {
             var self = this;
-            this.$http.post('http://localhost:3000/newOutfit', outfit).then(function() {
+            url = ""
+            if(like){
+                url = "http://localhost:3000/likeOutfit"
+            } else {
+                url = "http://localhost:3000/dislikeOutfit"
+            }
+
+            this.$http.post(url, outfit).then(function() {
                 swal("Form Submitted")
                 swal(
                     'Success!',
