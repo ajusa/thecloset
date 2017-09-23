@@ -123,6 +123,29 @@ var app = new Vue({
             return key.split(".").reduce(function(o, x) {
                 return (typeof o == "undefined" || o === null) ? o : o[x];
             }, obj);
+        },
+        submit: function() {
+            var test = {
+                type: this.parsedArticle,
+                color: this.parsedColor,
+                style: this.style,
+                weathers: [],
+            }
+            this.$http.post('/newArticle', test).then(function() {
+                swal("Form Submitted")
+                swal(
+                    'Success!',
+                    'You added an outfit',
+                    'success'
+                )
+            }, function() {
+                swal(
+                    'Oops...',
+                    'Something went wrong!',
+                    'error'
+                )
+
+            });
         }
     }
 })
