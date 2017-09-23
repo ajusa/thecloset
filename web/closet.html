@@ -60,11 +60,21 @@
                         </div>
                     </div>
                     <div class="card p3 mv2 mw6">
-                        <h4>Outfit</h4>
+                        <h4>Article</h4>
                         <div :style="'font-size: 5rem;color:'+parsedColor" :class="get(parsedArticle, 'icon')"></div>
                         <br>
                         <p>{{style.join(", ")}}</p>
                         <button class="btn-primary" v-if="style.length>0&&parsedColor&&parsedArticle" @click="submit">Add Outfit</button>
+                    </div>
+                    <div class="row cf" v-for="row in allArticles">
+                        <div class="four columns" v-for="article in row">
+                            <div class="card p3 mv2 mw6">
+                                <h4>{{article.style.join(", ")}}</h4>
+                                <div :style="'font-size: 5rem;color:'+article.color" :class="parseArticle(article.type).icon"></div>
+                                <br>
+                                <button class="btn-primary mh2" @click="removeArticle(article.uid)">Delete</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,10 +82,20 @@
     </div>
 </body>
 <script>
+Array.prototype.chunk = function(groupsize) {
+    var sets = [];
+    var chunks = this.length / groupsize;
+
+    for (var i = 0, j = 0; i < chunks; i++, j += groupsize) {
+        sets[i] = this.slice(j, j + groupsize);
+    }
+
+    return sets;
+};
 var app = new Vue({
     el: '#app',
     created: function() {
-
+        this.updateArticles()
     },
     data: {
         style: [],
@@ -107,6 +127,7 @@ var app = new Vue({
                 icon: "flaticon-jeans-1"
             },
         ],
+        allArticles: [],
     },
     computed: {
         parsedArticle: function() {
@@ -124,6 +145,22 @@ var app = new Vue({
                 return (typeof o == "undefined" || o === null) ? o : o[x];
             }, obj);
         },
+        updateArticles: function() {
+            var self = this;
+            this.$http.get("http://localhost:3000/getCloset").then(function(resp) {
+                self.allArticles = resp.body.reverse().chunk(3)
+            })
+        },
+         parseArticle: function(type) {
+            return new Fuse(this.articles, { keys: ["name"] }).search(type)[0]; // "list" is the item array
+        },
+        removeArticle: function(uid){
+            var self = this
+            this.$http.delete("http://localhost:3000/removeArticle?uid="+uid).then(function(resp) {
+                self.updateArticles()
+                swal("Article of Clothing removed from Closet")
+            })
+        },
         submit: function() {
             var test = {
                 type: this.parsedArticle.name,
@@ -131,13 +168,15 @@ var app = new Vue({
                 style: this.style,
                 weathers: [],
             }
+            var self = this;
             this.$http.post('http://localhost:3000/newArticle', test).then(function() {
                 swal("Form Submitted")
                 swal(
                     'Success!',
-                    'You added an outfit',
+                    'You added an article of clothing',
                     'success'
                 )
+                self.updateArticles()
             }, function() {
                 swal(
                     'Oops...',
