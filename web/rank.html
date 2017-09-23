@@ -15,9 +15,9 @@
     <script src="one-color.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
     <style>
-        body{
-            font-family: "Roboto"
-        }
+    body {
+        font-family: "Roboto"
+    }
     </style>
 </head>
 
@@ -45,19 +45,17 @@
                 <div class="eight columns">
                     <h3>Rank Styles</h3>
                     <p>You can see potential outfits here and rank them based on how much you like them. </p>
-                    <div class="row cf">
-                        <div class="four columns">
+                    <div class="row cf" v-for="row in allOutfits">
+                        <div class="four columns" v-for="outfit in row">
                             <div class="card p3 mv2 mw6">
                                 <h4>Outfit</h4>
-                                <div v-for="article in outfits.sort(function(a,b){if(a.pos=='bottom'){return -1} else return 1})">
-                                    <div :style="'font-size: 5rem;color:'+article.parsedColor" :class="parsedArticle(article.type).icon"></div>
+                                <div v-for="article in outfit.sort(function(a,b){if(a.pos=='bottom'){return 1} else return -1})">
+                                    <div :style="'font-size: 5rem;color:'+article.color" :class="parsedArticle(article.type).icon"></div>
                                 </div>
                                 <br>
-                                <button class="btn-primary mh2" @click="">Like</button>
+                                <button class="btn-primary mh2" @click="newOutfit(outfit)">Like</button>
                             </div>
                         </div>
-                        <div class="four columns"></div>
-                        <div class="four columns"></div>
                     </div>
                 </div>
             </div>
@@ -65,30 +63,24 @@
     </div>
 </body>
 <script>
+Array.prototype.chunk = function(groupsize) {
+    var sets = [];
+    var chunks = this.length / groupsize;
+
+    for (var i = 0, j = 0; i < chunks; i++, j += groupsize) {
+        sets[i] = this.slice(j, j + groupsize);
+    }
+
+    return sets;
+};
 var app = new Vue({
     el: '#app',
     created: function() {
-
+        this.updateOutfits();
     },
     data: {
         style: [],
-        outfits: [{
-            color: "#800080",
-            pos: "bottom",
-            style: [
-                "casual",
-                "fancy"
-            ],
-            type: "shirt"
-        }, {
-            color: "#800080",
-            pos: "top",
-            style: [
-                "casual",
-                "fancy"
-            ],
-            type: "jeans"
-        }],
+        allOutfits: [],
         articles: [{
                 name: "t-shirt",
                 icon: "flaticon-shirt-2"
@@ -101,6 +93,10 @@ var app = new Vue({
                 name: "jeans",
                 icon: "flaticon-jeans-1"
             },
+            {
+                name: "shorts",
+                icon: "flaticon-swimsuit-1"
+            }
         ],
     },
     computed: {},
@@ -110,23 +106,25 @@ var app = new Vue({
                 return (typeof o == "undefined" || o === null) ? o : o[x];
             }, obj);
         },
+        updateOutfits: function() {
+            var self = this;
+            this.$http.get("http://localhost:3000/getOutfits").then(function(resp) {
+                self.allOutfits = resp.body.reverse().chunk(3)
+            })
+        },
         parsedArticle: function(type) {
             return new Fuse(this.articles, { keys: ["name"] }).search(type)[0]; // "list" is the item array
         },
-        submit: function() {
-            var test = {
-                type: this.parsedArticle,
-                color: this.parsedColor,
-                style: this.style,
-                weathers: [],
-            }
-            this.$http.post('/newOutfit', test).then(function() {
+        newOutfit: function(outfit) {
+            var self = this;
+            this.$http.post('http://localhost:3000/newOutfit', outfit).then(function() {
                 swal("Form Submitted")
                 swal(
                     'Success!',
                     'You added an outfit',
                     'success'
                 )
+                self.updateOutfits()
             }, function() {
                 swal(
                     'Oops...',
