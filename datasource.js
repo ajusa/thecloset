@@ -9,6 +9,7 @@ const request = require('request');
 const app = express()
 app.use(bodyParser.json()); // for parsing application/json
 app.use(cors())
+app.use(express.static('web'))
 
 // Initialize Firebase
 var config = {
@@ -93,11 +94,11 @@ app.delete('/removeArticle', function(req, res) {
         }, function(error, response, body) {
           if (!error && response.statusCode == 200) {
             res.status(response.statusCode).json(body);
-          } else {
+          } else
             {
-              res.sendStatus(418);
-            });
-        res.send(outfits);
+              res.sendStatus(500);
+            }
+          });
       })
 
       // Takes a new outfit and posts it to the database, then posts it to the Flask AI.
@@ -117,7 +118,7 @@ app.delete('/removeArticle', function(req, res) {
             res.status(response.statusCode).json(body);
           } else {
             {
-              res.sendStatus(418);
+              res.sendStatus(500);
             }
           }
         });
@@ -139,7 +140,7 @@ app.delete('/removeArticle', function(req, res) {
             res.status(response.statusCode).json(body);
           } else {
             {
-              res.sendStatus(418);
+              res.sendStatus(500);
             }
           }
         });
