@@ -14,6 +14,12 @@
     <script src="fuse.js"></script>
     <script src="sweetalert2.min.js"></script>
     <script src="one-color.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <style>
+        body{
+            font-family: "Roboto"
+        }
+    </style>
 </head>
 
 <body>
@@ -39,7 +45,7 @@
                 </div>
                 <div class="eight columns">
                     <h3>Add items</h3>
-                    <p>You can add items of clothing that are in your closet. Simply type in the color of the clothing, the type, and what styles you are comfortable wearing it (formal, fitness, casual).</p>
+                    <p>You can add items of clothing that are in your closet. Simply type in the <a href="http://colours.neilorangepeel.com/">color</a> of the clothing, the type (shorts, jeans, t-shirt), and what styles you are comfortable wearing it (formal, fitness, casual).</p>
                     <div class="row cf">
                         <div class="four columns">
                             <input type="text" placeholder="Article" v-model="article">
@@ -59,12 +65,21 @@
                             <br>
                         </div>
                     </div>
-                    <div class="card p3 mv2 mw6">
-                        <h4>Outfit</h4>
+                    <div class="card p3 mv2 mw6" v-if="style.length>0||parsedColor||parsedArticle">
+                        <h4>{{style.join(", ")}}</h4>
                         <div :style="'font-size: 5rem;color:'+parsedColor" :class="get(parsedArticle, 'icon')"></div>
-                        <br>
-                        <p>{{style.join(", ")}}</p>
                         <button class="btn-primary" v-if="style.length>0&&parsedColor&&parsedArticle" @click="submit">Add Outfit</button>
+                    </div>
+                    <br>
+                    <div class="row cf" v-for="row in allArticles">
+                        <div class="four columns" v-for="article in row">
+                            <div class="card p3 mv2 mw6">
+                                <h4>{{article.style.join(", ")}}</h4>
+                                <div :style="'font-size: 5rem;color:'+article.color" :class="parseArticle(article.type).icon"></div>
+                                <br>
+                                <button class="btn-primary mh2" @click="removeArticle(article.uid)">Delete</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,28 +87,25 @@
     </div>
 </body>
 <script>
+Array.prototype.chunk = function(groupsize) {
+    var sets = [];
+    var chunks = this.length / groupsize;
+
+    for (var i = 0, j = 0; i < chunks; i++, j += groupsize) {
+        sets[i] = this.slice(j, j + groupsize);
+    }
+
+    return sets;
+};
 var app = new Vue({
     el: '#app',
     created: function() {
-
+        this.updateArticles()
     },
     data: {
         style: [],
         color: "",
         article: "",
-        styles: [{
-                title: "Formal",
-                tags: ["Formal", "Fancy", "Party"]
-            },
-            {
-                title: "Casual",
-                tags: ["School", "Casual", "Chill"]
-            },
-            {
-                title: "Fitness",
-                tags: ["Fitness", "Athletic", "Exercise"]
-            },
-        ],
         articles: [{
                 name: "t-shirt",
                 icon: "flaticon-shirt-2"
@@ -106,7 +118,12 @@ var app = new Vue({
                 name: "jeans",
                 icon: "flaticon-jeans-1"
             },
+            {
+                name: "shorts",
+                icon: "flaticon-swimsuit-1"
+            }
         ],
+        allArticles: [],
     },
     computed: {
         parsedArticle: function() {
@@ -115,7 +132,7 @@ var app = new Vue({
         parsedColor: function() {
             if (this.color != "" && one.color(this.color.replace(/\s+/g, '')))
                 return one.color(this.color.replace(/\s+/g, '')).hex()
-            return "black"
+            return null
         },
     },
     methods: {
@@ -124,6 +141,22 @@ var app = new Vue({
                 return (typeof o == "undefined" || o === null) ? o : o[x];
             }, obj);
         },
+        updateArticles: function() {
+            var self = this;
+            this.$http.get("http://35.3.111.174:3000/getCloset").then(function(resp) {
+                self.allArticles = resp.body.reverse().chunk(3)
+            })
+        },
+         parseArticle: function(type) {
+            return new Fuse(this.articles, { keys: ["name"] }).search(type)[0]; // "list" is the item array
+        },
+        removeArticle: function(uid){
+            var self = this
+            this.$http.delete("http://35.3.111.174:3000/removeArticle?uid="+uid).then(function(resp) {
+                self.updateArticles()
+                swal("Article of Clothing removed from Closet")
+            })
+        },
         submit: function() {
             var test = {
                 type: this.parsedArticle.name,
@@ -131,13 +164,15 @@ var app = new Vue({
                 style: this.style,
                 weathers: [],
             }
-            this.$http.post('http://localhost:3000/newArticle', test).then(function() {
+            var self = this;
+            this.$http.post('http://35.3.111.174:3000/newArticle', test).then(function() {
                 swal("Form Submitted")
                 swal(
                     'Success!',
-                    'You added an outfit',
+                    'You added an article of clothing',
                     'success'
                 )
+                self.updateArticles()
             }, function() {
                 swal(
                     'Oops...',

@@ -13,6 +13,12 @@
     <script src="fuse.js"></script>
     <script src="sweetalert2.min.js"></script>
     <script src="one-color.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <style>
+        body{
+            font-family: "Roboto"
+        }
+    </style>
 </head>
 
 <body>
@@ -114,7 +120,7 @@ var app = new Vue({
                 style: this.style,
                 weathers: [],
             }
-            this.$http.post('/newArticle', test).then(function() {
+            this.$http.post('/newOutfit', test).then(function() {
                 swal("Form Submitted")
                 swal(
                     'Success!',
