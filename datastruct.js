@@ -1,8 +1,9 @@
+
 const express = require('express')
 const firebase = require('firebase')
 const bodyParser = require('body-parser')
 
-
+// Initialize Express
 const app = express()
 app.use(bodyParser.json()); // for parsing application/json
 
@@ -16,29 +17,34 @@ app.use(bodyParser.json()); // for parsing application/json
     messagingSenderId: "727915381699"
   };
   firebase.initializeApp(config);
+  var database = firebase.database();
 
-// Get a reference to the database service
-var database = firebase.database();
+var bottoms = ["jeans"];
 
-var test = {
-  type: "jeans",
-  pos: "bottom",
-  color: "#800080",
-  style: ["casual", "fancy"],
-  weathers: [],
-}
+var tops = ["t-shirt", "jacket"];
 
-var newPostKey = database.ref().child('posts').push().key;
 
-//database.ref('closet/' + newPostKey).set(test);
-
+// Express Stuff
 app.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
 app.post('/newArticle', function (req, res) {
+  var article = req.body;
+  var newPostKey = database.ref().child('posts').push().key;
+
+  if (bottoms.indexOf(article.type) != -1)
+  {
+    article.pos = "bottom";
+  } else if (tops.indexOf(article.type) != -1)
+  {
+    article.pos = "top";
+  }
+
+  database.ref('closet/' + newPostKey).set(article);
 
   res.sendStatus(200);
+  console.log("success!");
 })
 
 app.listen(3000, function () {
