@@ -28,11 +28,6 @@ var tops = ["t-shirt", "jacket"]; //types of clothing considered top
 
 
 // Express routing
-// Homepage is redirected to getCloset
-app.get('/', function(req, res) {
-  res.redirect('/getCloset');
-})
-
 // Gets the entire closet of clothes and parses it into a JSON array, adding the uid of the article as an attribute.
 app.get('/getCloset', function(req, res) {
   var closet_array = [];
