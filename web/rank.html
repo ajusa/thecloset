@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="font/flaticon.css">
     <script src="vue.js"></script>
     <script src="vue-resource.js"></script>
-    <script src="flatpickr.js"></script>
     <script src="fuse.js"></script>
     <script src="sweetalert2.min.js"></script>
     <script src="one-color.js"></script>
@@ -27,10 +26,10 @@
         <div class="container">
             <div class="row pt3 cf">
                 <div class="four columns pb4">
-                    <div class="p3 dim bg-primary white">
+                    <div class="p3 dim">
                         Add Closet Items
                     </div>
-                    <div class="p3 dim">
+                    <div class="p3 dim bg-primary white">
                         Rank Styles
                     </div>
                     <div class="p3 dim">
@@ -38,33 +37,21 @@
                     </div>
                 </div>
                 <div class="eight columns">
-                    <h3>Add items</h3>
-                    <p>You can add items of clothing that are in your closet. Simply type in the color of the clothing, the type, and what styles you are comfortable wearing it (formal, fitness, casual).</p>
+                    <h3>Rank Styles</h3>
+                    <p>You can see potential outfits here and rank them based on how much you like them. </p>
                     <div class="row cf">
                         <div class="four columns">
-                            <input type="text" placeholder="Article" v-model="article">
+                            <div class="card p3 mv2 mw6">
+                                <h4>Outfit</h4>
+                                <div v-for="article in outfits">
+                                    <div :style="'font-size: 5rem;color:'+article.parsedColor" :class="parsedArticle(article.type).icon"></div>
+                                </div>
+                                <br>
+                                <button class="btn-primary mh2">Like</button><button class="btn mh2">Not Like</button>
+                            </div>
                         </div>
-                        <div class="four columns">
-                            <input type="text" placeholder="Color" v-model="color">
-                        </div>
-                        <div class="four columns">
-                            <input type="checkbox" value="casual" v-model="style">
-                            <span>Casual</span>
-                            <br>
-                            <input type="checkbox" value="fitness" v-model="style">
-                            <span>Fitness</span>
-                            <br>
-                            <input type="checkbox" value="formal" v-model="style">
-                            <span>Formal</span>
-                            <br>
-                        </div>
-                    </div>
-                    <div class="card p3 mv2 mw6">
-                        <h4>Outfit</h4>
-                        <div :style="'font-size: 5rem;color:'+parsedColor" :class="get(parsedArticle, 'icon')"></div>
-                        <br>
-                        <p>{{style.join(", ")}}</p>
-                        <button class="btn-primary" v-if="style.length>0&&parsedColor&&parsedArticle">Add Outfit</button>
+                        <div class="four columns"></div>
+                        <div class="four columns"></div>
                     </div>
                 </div>
             </div>
@@ -79,21 +66,23 @@ var app = new Vue({
     },
     data: {
         style: [],
-        color: "",
-        article: "",
-        styles: [{
-                title: "Formal",
-                tags: ["Formal", "Fancy", "Party"]
-            },
-            {
-                title: "Casual",
-                tags: ["School", "Casual", "Chill"]
-            },
-            {
-                title: "Fitness",
-                tags: ["Fitness", "Athletic", "Exercise"]
-            },
-        ],
+        outfits: [{
+            color: "#800080",
+            pos: "bottom",
+            style: [
+                "casual",
+                "fancy"
+            ],
+            type: "shirt"
+        }, {
+            color: "#800080",
+            pos: "top",
+            style: [
+                "casual",
+                "fancy"
+            ],
+            type: "jeans"
+        }],
         articles: [{
                 name: "t-shirt",
                 icon: "flaticon-shirt-2"
@@ -108,21 +97,15 @@ var app = new Vue({
             },
         ],
     },
-    computed: {
-        parsedArticle: function() {
-            return new Fuse(this.articles, { keys: ["name"] }).search(this.article)[0]; // "list" is the item array
-        },
-        parsedColor: function() {
-            if (this.color != "" && one.color(this.color.replace(/\s+/g, '')))
-                return one.color(this.color.replace(/\s+/g, '')).hex()
-            return "black"
-        },
-    },
+    computed: {},
     methods: {
         get: function(obj, key) {
             return key.split(".").reduce(function(o, x) {
                 return (typeof o == "undefined" || o === null) ? o : o[x];
             }, obj);
+        },
+        parsedArticle: function(type) {
+            return new Fuse(this.articles, { keys: ["name"] }).search(type)[0]; // "list" is the item array
         },
         submit: function() {
             var test = {
@@ -131,7 +114,7 @@ var app = new Vue({
                 style: this.style,
                 weathers: [],
             }
-            this.$http.post('localhost:3000/newArticle', test).then(function() {
+            this.$http.post('/newArticle', test).then(function() {
                 swal("Form Submitted")
                 swal(
                     'Success!',
