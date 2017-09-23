@@ -126,12 +126,12 @@ var app = new Vue({
         },
         submit: function() {
             var test = {
-                type: this.parsedArticle,
+                type: this.parsedArticle.name,
                 color: this.parsedColor,
                 style: this.style,
                 weathers: [],
             }
-            this.$http.post('localhost:3000/newArticle', test).then(function() {
+            this.$http.post('http://localhost:3000/newArticle', test).then(function() {
                 swal("Form Submitted")
                 swal(
                     'Success!',

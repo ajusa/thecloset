@@ -2,11 +2,11 @@
 const express = require('express')
 const firebase = require('firebase')
 const bodyParser = require('body-parser')
-
+var cors = require('cors')
 // Initialize Express
 const app = express()
 app.use(bodyParser.json()); // for parsing application/json
-
+app.use(cors())
 // Initialize Firebase
   var config = {
     apiKey: "AIzaSyBzX7gVYuZzocDLN1fdCfbVCfYYm2xTzow",
