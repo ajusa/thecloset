@@ -1,0 +1,139 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 22/06/2016 15:38
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-bag:before { content: "\f100"; }
+.flaticon-bag-1:before { content: "\f101"; }
+.flaticon-bag-2:before { content: "\f102"; }
+.flaticon-bag-3:before { content: "\f103"; }
+.flaticon-body:before { content: "\f104"; }
+.flaticon-bra:before { content: "\f105"; }
+.flaticon-cardigan:before { content: "\f106"; }
+.flaticon-cardigan-1:before { content: "\f107"; }
+.flaticon-dress:before { content: "\f108"; }
+.flaticon-dress-1:before { content: "\f109"; }
+.flaticon-dress-2:before { content: "\f10a"; }
+.flaticon-dress-3:before { content: "\f10b"; }
+.flaticon-hat:before { content: "\f10c"; }
+.flaticon-high-heels:before { content: "\f10d"; }
+.flaticon-high-heels-1:before { content: "\f10e"; }
+.flaticon-high-heels-2:before { content: "\f10f"; }
+.flaticon-high-heels-3:before { content: "\f110"; }
+.flaticon-jeans:before { content: "\f111"; }
+.flaticon-jeans-1:before { content: "\f112"; }
+.flaticon-pamela:before { content: "\f113"; }
+.flaticon-panties:before { content: "\f114"; }
+.flaticon-poncho:before { content: "\f115"; }
+.flaticon-purse:before { content: "\f116"; }
+.flaticon-sandal:before { content: "\f117"; }
+.flaticon-shirt:before { content: "\f118"; }
+.flaticon-shirt-1:before { content: "\f119"; }
+.flaticon-shirt-10:before { content: "\f11a"; }
+.flaticon-shirt-2:before { content: "\f11b"; }
+.flaticon-shirt-3:before { content: "\f11c"; }
+.flaticon-shirt-4:before { content: "\f11d"; }
+.flaticon-shirt-5:before { content: "\f11e"; }
+.flaticon-shirt-6:before { content: "\f11f"; }
+.flaticon-shirt-7:before { content: "\f120"; }
+.flaticon-shirt-8:before { content: "\f121"; }
+.flaticon-shirt-9:before { content: "\f122"; }
+.flaticon-shoe:before { content: "\f123"; }
+.flaticon-shoe-1:before { content: "\f124"; }
+.flaticon-shoe-2:before { content: "\f125"; }
+.flaticon-shoe-3:before { content: "\f126"; }
+.flaticon-shoe-4:before { content: "\f127"; }
+.flaticon-skirt:before { content: "\f128"; }
+.flaticon-skirt-1:before { content: "\f129"; }
+.flaticon-skirt-2:before { content: "\f12a"; }
+.flaticon-sweater:before { content: "\f12b"; }
+.flaticon-swimsuit:before { content: "\f12c"; }
+.flaticon-swimsuit-1:before { content: "\f12d"; }
+.flaticon-top:before { content: "\f12e"; }
+.flaticon-top-1:before { content: "\f12f"; }
+.flaticon-vest:before { content: "\f130"; }
+.flaticon-watch:before { content: "\f131"; }
+    
+    $font-Flaticon-bag: "\f100";
+    $font-Flaticon-bag-1: "\f101";
+    $font-Flaticon-bag-2: "\f102";
+    $font-Flaticon-bag-3: "\f103";
+    $font-Flaticon-body: "\f104";
+    $font-Flaticon-bra: "\f105";
+    $font-Flaticon-cardigan: "\f106";
+    $font-Flaticon-cardigan-1: "\f107";
+    $font-Flaticon-dress: "\f108";
+    $font-Flaticon-dress-1: "\f109";
+    $font-Flaticon-dress-2: "\f10a";
+    $font-Flaticon-dress-3: "\f10b";
+    $font-Flaticon-hat: "\f10c";
+    $font-Flaticon-high-heels: "\f10d";
+    $font-Flaticon-high-heels-1: "\f10e";
+    $font-Flaticon-high-heels-2: "\f10f";
+    $font-Flaticon-high-heels-3: "\f110";
+    $font-Flaticon-jeans: "\f111";
+    $font-Flaticon-jeans-1: "\f112";
+    $font-Flaticon-pamela: "\f113";
+    $font-Flaticon-panties: "\f114";
+    $font-Flaticon-poncho: "\f115";
+    $font-Flaticon-purse: "\f116";
+    $font-Flaticon-sandal: "\f117";
+    $font-Flaticon-shirt: "\f118";
+    $font-Flaticon-shirt-1: "\f119";
+    $font-Flaticon-shirt-10: "\f11a";
+    $font-Flaticon-shirt-2: "\f11b";
+    $font-Flaticon-shirt-3: "\f11c";
+    $font-Flaticon-shirt-4: "\f11d";
+    $font-Flaticon-shirt-5: "\f11e";
+    $font-Flaticon-shirt-6: "\f11f";
+    $font-Flaticon-shirt-7: "\f120";
+    $font-Flaticon-shirt-8: "\f121";
+    $font-Flaticon-shirt-9: "\f122";
+    $font-Flaticon-shoe: "\f123";
+    $font-Flaticon-shoe-1: "\f124";
+    $font-Flaticon-shoe-2: "\f125";
+    $font-Flaticon-shoe-3: "\f126";
+    $font-Flaticon-shoe-4: "\f127";
+    $font-Flaticon-skirt: "\f128";
+    $font-Flaticon-skirt-1: "\f129";
+    $font-Flaticon-skirt-2: "\f12a";
+    $font-Flaticon-sweater: "\f12b";
+    $font-Flaticon-swimsuit: "\f12c";
+    $font-Flaticon-swimsuit-1: "\f12d";
+    $font-Flaticon-top: "\f12e";
+    $font-Flaticon-top-1: "\f12f";
+    $font-Flaticon-vest: "\f130";
+    $font-Flaticon-watch: "\f131";

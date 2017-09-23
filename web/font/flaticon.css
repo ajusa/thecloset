@@ -1,0 +1,79 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 22/06/2016 15:38
+  	*/
+
+@font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+  font-family: Flaticon;
+font-style: normal;
+}
+
+.flaticon-bag:before { content: "\f100"; }
+.flaticon-bag-1:before { content: "\f101"; }
+.flaticon-bag-2:before { content: "\f102"; }
+.flaticon-bag-3:before { content: "\f103"; }
+.flaticon-body:before { content: "\f104"; }
+.flaticon-bra:before { content: "\f105"; }
+.flaticon-cardigan:before { content: "\f106"; }
+.flaticon-cardigan-1:before { content: "\f107"; }
+.flaticon-dress:before { content: "\f108"; }
+.flaticon-dress-1:before { content: "\f109"; }
+.flaticon-dress-2:before { content: "\f10a"; }
+.flaticon-dress-3:before { content: "\f10b"; }
+.flaticon-hat:before { content: "\f10c"; }
+.flaticon-high-heels:before { content: "\f10d"; }
+.flaticon-high-heels-1:before { content: "\f10e"; }
+.flaticon-high-heels-2:before { content: "\f10f"; }
+.flaticon-high-heels-3:before { content: "\f110"; }
+.flaticon-jeans:before { content: "\f111"; }
+.flaticon-jeans-1:before { content: "\f112"; }
+.flaticon-pamela:before { content: "\f113"; }
+.flaticon-panties:before { content: "\f114"; }
+.flaticon-poncho:before { content: "\f115"; }
+.flaticon-purse:before { content: "\f116"; }
+.flaticon-sandal:before { content: "\f117"; }
+.flaticon-shirt:before { content: "\f118"; }
+.flaticon-shirt-1:before { content: "\f119"; }
+.flaticon-shirt-10:before { content: "\f11a"; }
+.flaticon-shirt-2:before { content: "\f11b"; }
+.flaticon-shirt-3:before { content: "\f11c"; }
+.flaticon-shirt-4:before { content: "\f11d"; }
+.flaticon-shirt-5:before { content: "\f11e"; }
+.flaticon-shirt-6:before { content: "\f11f"; }
+.flaticon-shirt-7:before { content: "\f120"; }
+.flaticon-shirt-8:before { content: "\f121"; }
+.flaticon-shirt-9:before { content: "\f122"; }
+.flaticon-shoe:before { content: "\f123"; }
+.flaticon-shoe-1:before { content: "\f124"; }
+.flaticon-shoe-2:before { content: "\f125"; }
+.flaticon-shoe-3:before { content: "\f126"; }
+.flaticon-shoe-4:before { content: "\f127"; }
+.flaticon-skirt:before { content: "\f128"; }
+.flaticon-skirt-1:before { content: "\f129"; }
+.flaticon-skirt-2:before { content: "\f12a"; }
+.flaticon-sweater:before { content: "\f12b"; }
+.flaticon-swimsuit:before { content: "\f12c"; }
+.flaticon-swimsuit-1:before { content: "\f12d"; }
+.flaticon-top:before { content: "\f12e"; }
+.flaticon-top-1:before { content: "\f12f"; }
+.flaticon-vest:before { content: "\f130"; }
+.flaticon-watch:before { content: "\f131"; }
