@@ -43,7 +43,7 @@
                         <div class="four columns">
                             <div class="card p3 mv2 mw6">
                                 <h4>Outfit</h4>
-                                <div v-for="article in outfits">
+                                <div v-for="article in outfits.sort(function(a,b){if(a.pos=='bottom')})">
                                     <div :style="'font-size: 5rem;color:'+article.parsedColor" :class="parsedArticle(article.type).icon"></div>
                                 </div>
                                 <br>

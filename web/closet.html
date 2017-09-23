@@ -64,7 +64,7 @@
                         <div :style="'font-size: 5rem;color:'+parsedColor" :class="get(parsedArticle, 'icon')"></div>
                         <br>
                         <p>{{style.join(", ")}}</p>
-                        <button class="btn-primary" v-if="style.length>0&&parsedColor&&parsedArticle">Add Outfit</button>
+                        <button class="btn-primary" v-if="style.length>0&&parsedColor&&parsedArticle" @click="submit">Add Outfit</button>
                     </div>
                 </div>
             </div>
