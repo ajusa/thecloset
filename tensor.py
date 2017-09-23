@@ -3,49 +3,97 @@ import numpy as np
 import pandas as pd
 import json
 import csv
+import requests
+from textblob.classifiers import NaiveBayesClassifier
 
-def main():
-    #["fancy", "casual"]
-    articles = '[{"type": "shorts", "color": "blue", "style": "fancy"}, {"type": "jeans", "color": "blue", "style": "fancy"}]' #weather, #"outfits.json"
-    testArticles = '[{"type": "pants", "color": "green", "style": "fancy"}, {"type": "jeans", "color": "black", "style": "fancy"}]' #weather, #"outfits.json"
+from flask import Flask
+app = Flask(__name__)
+
+tops = []
+bottoms = []
+outfits = []
+topColors = []
+bottomColors = []
+outfit = []
+#awesomeOutfits = []
+column = ["topColors", "bottomColors"]
+@app.route("/giveGoodOutfit", methods = ['POST'])
+def hello():
+    if request.method == 'POST': #only take in one
+       good_outfit = request.get_json()
+       outfit = json.loads(good_outfit)
+       #make more outfits
+       #return main(outfit) ##TODO an array of jsons, size will be whatever arham wants
+       myOutfits = main()
+
+@app.route("/giveBadOutfit", methods = ['POST'])
+def hi():
+    if request.method == 'POST': #only take in one
+       neg_outfit = request.get_json()
+       outfit = json.loads(neg_outfit)
+       return main(outfit)
+
+@app.route("/getOutfits", methods=['GET'])
+def yo():
+    if request.method == 'GET':  # only take in one
+        return createAllOutfits()
+
+def createAllOutfits():
+    articles = requests.get("http://35.3.111.174:3000/getCloset").text
+    # parsedArticles = articles.text
     parsedArticles = json.loads(articles)
-    parsedTestArticles = json.loads(testArticles)
-    print(parsedArticles)
-    f = csv.writer(open("articles.csv", "wb+"))
-    print(csv.list_dialects())
-    f.writerow(["type", "color", "style"])
-    for i in range(0, parsedArticles.__len__()):
-        #print(parsedArticles[0]["type"])
-        f.writerow(parsedArticles[i]['type']) #, parsedArticles[1], parsedArticles[2]])
-        f.writerow(parsedArticles[i]['color'])
-        f.writerow(parsedArticles[i]['style'])
-
-    training = tf.contrib.learn.datasets.base.load_csv_without_header("articles.csv", np.int, np.float32)#int) string_
 
     for i in range(0, parsedArticles.__len__()):
-        print("article 0 color is: "+ parsedArticles[0]['color'])
+        pos = parsedArticles[i]['pos']
+        print(pos)
 
-    feature_columns = [tf.feature_column.numeric_column("x", shape=[4])]
-    #sparse1 = sparse_column_with_hash_bucket()
-    classifier = tf.estimator.DNNClassifier(feature_columns = feature_columns, hidden_units=[10,20,10], n_classes = 3, model_dir="~/Desktop/closet")
-    #[1024, 512, 256]
+        if pos == 'top':
+            tops.append(parsedArticles[i])
+        elif parsedArticles[i]['pos'] == 'bottom':
+            bottoms.append(parsedArticles[i])
 
-    train_input = tf.estimator.inputs.pandas_input_fn(x=np.array(training.data), y=np.array(training.target), num_epochs=3, shuffle=True)
-    #{"x": np.array(training.data)}
-    classifier.train(input_fn=train_input, steps=2000)
+    for i in range(0, tops.__len__()):
+        for j in range(0, bottoms.__len__()):
+            if tops[i]['style'] == bottoms[j]['style']:
+                outfits.append([tops[i], bottoms[j]])
 
-    predict_input = tf.estimator.inputs.numpy_input_fn(x={"x": np.array(parsedArticles)}, num_epochs=1, shuffle=False) #cant we use the same data for now?
+    #for i in range(0, outfits.__len__()):
+     #   print(outfits[i])
 
-#convert back good outfits to json
-    predictions = list(classifier.predict(input_fn=predict_input))
-    #def input_train():
-        #classifier.train(input_fn=input_train, steps=100)
+    return outfits
 
-    #def input_eval():
-        #classifier.evaluate(input_fn=input_eval, steps=10)
+def main():#sjs):
+    awesomeOutfits = []
+    #for j in range(0, tops.__len__()):
+     #   rgb = tuple(int(tops[j]['color'][i:i+2], 16) for i in (0, 2 ,4))
+      #  topColors.append(rgb)
 
-    #def input_predict:
-       # prediction = classifier.predict(input_fn=input_predict)
+    #for j in range(0, bottoms.__len__()):
+     #   rgb = tuple(int(bottoms[j]['color'][i:i + 2], 16) for i in (0, 2, 4)) #thx stackoverflow
+      #  bottomColors.append(rgb)
+    outfit = '[{"type": "shorts", "color": "blue", "style": "fancy"}, {"type": "jacket", "color": "blue", "style": "fancy"}]' #weather, #"outfits.json"
+    outfit = json.loads(outfit)
+    f = csv.writer(open("colors.csv", "wb+"))
+    f.writeRow(["color"])
 
-if __name__ == '__main__':
+    #colors = outfit[0]['color'] + " " + outfit[1]['color']
+    #train = [
+     #   {"text": colors, "label": "pos"}
+    #]
+
+    #with open("colors.csv", 'r') as fp:
+    cl = NaiveBayesClassifier("colors.csv", format='csv')
+    #prob = cl.prob_classify(outfit)
+
+    possible = createAllOutfits()
+    for i in range(0, possible.__len__()):
+        pcolors = possible[i][0]['color'] + " " + possible[i][1]['color']
+        print("HEELLO", pcolors)
+        probColor = cl.prob_classify(pcolors)
+        if(round(probColor.prob('pos'),2) >= .5):
+            awesomeOutfits.append(possible[i])
+
+    return awesomeOutfits
+
+if __name__ == "__main__":
     main()

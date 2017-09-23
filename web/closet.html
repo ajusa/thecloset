@@ -3,17 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>The Closet</title>
+    <title>Dressr</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="aj.min.css">
     <link rel="stylesheet" href="sweetalert2.min.css">
     <link rel="stylesheet" href="font/flaticon.css">
+    <link rel="stylesheet" href="spectre-icons.min.css">
     <script src="vue.js"></script>
     <script src="vue-resource.js"></script>
     <script src="flatpickr.js"></script>
     <script src="fuse.js"></script>
     <script src="sweetalert2.min.js"></script>
     <script src="one-color.js"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
     <style>
         body{
@@ -24,22 +26,22 @@
 
 <body>
     <div id="app">
-        <header class="navbar ph2 pv3 bg-near-white">
-            <section class="fl">
+        <header class="navbar p2 bg-near-white">
+            <section class="fl container">
                 <a href="#" class="btn btn-link tracked b dib">
-                    <span class="purple">The Closet</span>
+                    <span class="purple ttu tracked">Dressr</span>
                 </a>
         </header>
         <div class="container">
             <div class="row pt3 cf">
                 <div class="four columns pb4">
-                    <div class="p3 dim bg-primary white">
+                    <div class="p3 dim bg-primary white hand">
                         Closet Items
                     </div>
-                    <div class="p3 dim" onclick="location.href='rank.html'">
+                    <div class="p3 dim hand" onclick="location.href='rank.html'">
                         Rank Styles
                     </div>
-                    <div class="p3 dim">
+                    <div class="p3 dim hand">
                         What do I wear?
                     </div>
                 </div>
@@ -74,10 +76,10 @@
                     <div class="row cf" v-for="row in allArticles">
                         <div class="four columns tc" v-for="article in row">
                             <div class="card p3 mv2 mw6">
-                                <h4>{{article.style.join(", ")}}</h4>
+                                
                                 <div :style="'font-size: 5rem;color:'+article.color" :class="parseArticle(article.type).icon"></div>
-                                <br>
-                                <button class="btn-primary mh2" @click="removeArticle(article.uid)">Delete</button>
+                                <p class="silver">{{article.style.join(" | ")}}</p>
+                                <i class="icon icon-cross f4 red mh2 hand" @click="removeArticle(article.uid)">Delete</i>
                             </div>
                         </div>
                     </div>
