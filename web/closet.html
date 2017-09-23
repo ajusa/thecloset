@@ -59,13 +59,12 @@
                             <br>
                         </div>
                     </div>
-                    <div class="card p3 mv2 mw6">
-                        <h4>Article</h4>
+                    <div class="card p3 mv2 mw6" v-if="style.length>0||parsedColor||parsedArticle">
+                        <h4>{{style.join(", ")}}</h4>
                         <div :style="'font-size: 5rem;color:'+parsedColor" :class="get(parsedArticle, 'icon')"></div>
-                        <br>
-                        <p>{{style.join(", ")}}</p>
                         <button class="btn-primary" v-if="style.length>0&&parsedColor&&parsedArticle" @click="submit">Add Outfit</button>
                     </div>
+                    <br>
                     <div class="row cf" v-for="row in allArticles">
                         <div class="four columns" v-for="article in row">
                             <div class="card p3 mv2 mw6">
@@ -101,19 +100,6 @@ var app = new Vue({
         style: [],
         color: "",
         article: "",
-        styles: [{
-                title: "Formal",
-                tags: ["Formal", "Fancy", "Party"]
-            },
-            {
-                title: "Casual",
-                tags: ["School", "Casual", "Chill"]
-            },
-            {
-                title: "Fitness",
-                tags: ["Fitness", "Athletic", "Exercise"]
-            },
-        ],
         articles: [{
                 name: "t-shirt",
                 icon: "flaticon-shirt-2"
@@ -126,6 +112,10 @@ var app = new Vue({
                 name: "jeans",
                 icon: "flaticon-jeans-1"
             },
+            {
+                name: "shorts",
+                icon: "flaticon-swimsuit-1"
+            }
         ],
         allArticles: [],
     },
@@ -136,7 +126,7 @@ var app = new Vue({
         parsedColor: function() {
             if (this.color != "" && one.color(this.color.replace(/\s+/g, '')))
                 return one.color(this.color.replace(/\s+/g, '')).hex()
-            return "black"
+            return null
         },
     },
     methods: {
