@@ -144,6 +144,6 @@ app.delete('/removeArticle', function(req, res) {
       })
 
       // The server is started.
-      app.listen(3000, function() {
+      app.listen(process.env.PORT || 3000, function() {
         console.log('Server started at port 3000')
       })
