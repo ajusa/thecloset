@@ -27,11 +27,12 @@
 
 <body>
     <div id="app">
-        <header class="navbar p2 bg-near-white">
+        <header class="navbar p2 bg-primary">
             <section class="fl container">
-                <a href="#" class="btn btn-link tracked b dib">
-                    <span class="purple ttu ">Dressr</span>
+                <a href="#" class="btn btn-link b">
+                    <span class="primary ttu tracked white">Dressr</span>
                 </a>
+            </section>
         </header>
         <div class="container">
             <div class="row pt3 cf">
@@ -48,7 +49,6 @@
                 </div>
                 <div class="nine columns">
                     <h3 class="dib mr3">Wear this today!</h3> <span class="f5 fw4 silver">{{temp}} right now</span>
-                    
                     <p>Go ahead and select the style you need, and we'll give you some choices that'll be snazzy!</p>
                     <div class="row cf" v-for="row in allOutfits">
                         <div class="four columns tc" v-for="outfit in row">
