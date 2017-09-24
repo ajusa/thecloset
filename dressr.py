@@ -2,9 +2,6 @@ import numpy as np
 import json
 import csv
 import requests
-from textblob.classifiers import NaiveBayesClassifier
-import collections
-import random
 
 from flask import Flask, jsonify, request
 
@@ -26,7 +23,6 @@ liked = []
 clothing_matches = []
 
 badOutfits = []
-old_outfits = []
 
 articles = []
 
@@ -34,31 +30,6 @@ column = ["topColors", "bottomColors"]
 
 def main(bad, good, receivedOutfit):
     global awesomeOutfits
-
-    #potential = createAllOutfits();
-
-    #   receivedColorSet = outfitColors(receivedOutfit)
-
-    # if(good):
-    #     train = [(receivedColorSet, 'pos')]
-    # if(bad):
-    #     train = [(receivedColorSet, 'neg')]
-    # cl = NaiveBayesClassifier(train)
-    #
-    # affinityMap = {}
-    # print "Done with training AI"
-    # if (good):
-    #     for i in range(0, len(potential)):
-    #         potentialColorSet = outfitColors(potential[i])
-    #         colorSetProbablities = cl.prob_classify(potentialColorSet)
-    #         colorSetAffinity = colorSetProbablities.prob('pos')
-    #         affinityMap.update({str(i):str(colorSetAffinity)})
-    #         print "index:affinity - " + str(i) + ":" + str(colorSetAffinity)
-    #     outfitOrder = sorted(affinityMap, key=affinityMap.__getitem__)
-    #     for i in range(0, len(outfitOrder)):
-    #         awesomeOutfits.append(potential[int(outfitOrder[i])])
-    #
-    # return awesomeOutfits
     awesomeOutfits = algorithm(bad, good, receivedOutfit)
     return awesomeOutfits
 
@@ -104,16 +75,13 @@ def sendAllOutfits():
 
 def algorithm(bad, good, liked):
     global clothing_matches
-    global old_outfits
-    global first
-   # global liked
-    #global badColors
     testTops = []
     testBottoms = []
+
     badTops = []
     badBottoms = []
     outfits = createAllOutfits()
-    #badColors = []
+
     global badMatches
     global badOutfits
     global clothesMatchesOutfits
@@ -163,17 +131,6 @@ def algorithm(bad, good, liked):
                 if(bad):
                     badMatches.append(outfits[i][1])
 
-    # if (bad):
-    #     if first == 1:
-    #         badMatches.append(outfits[i][0])
-    #         badMatches.append(outfits[i][1])
-    #         first = 0
-    #     #clothing_matches = old_clothing_matches  # .insert(0, outfits[i][0])
-      #  outfits.remove(i)
-     #   outfits = old_outfits
-
-    #random.shuffle(clothing_matches)
-
     #now that we have some similar things in clothing_matches...START MAKING THE OUTFITS
     #make bad outfits!!!!!!!!!!!!!!!
     for i in range(0, badMatches.__len__()):
@@ -191,7 +148,7 @@ def algorithm(bad, good, liked):
             if any(k in badTops[i]['style'] for k in badBottoms[j]['style']):
                 badOutfits.append([badTops[i], badBottoms[j]])
 
-    #calculate good outfits
+    #calculate good outfit - tops and bottoms
     for i in range(0, clothing_matches.__len__()):
         pos = clothing_matches[i]['pos']
 
@@ -208,20 +165,12 @@ def algorithm(bad, good, liked):
 
                 if(not currentOutfit in clothesMatchesOutfits and not currentOutfit in badOutfits): #Matches):
                     clothesMatchesOutfits.append([testTops[i], testBottoms[j]])  # combine tops and bottoms to form all possible outputs
-                #else:
-                    #clothesMatchesOutfits.remove(currentOutfit)
-                #if(badMatches.__sizeof__() > 0):
-                    #add everything NOT in here to the clothesmatchesoutfits frm outfits
-                    #if (badMatches.__contains__(currentOutfit)):
-                       # outfits.remove(currentOutfit)
 
     if(len(clothesMatchesOutfits) == 0 and badOutfits.__len__()): #Matches.__len__() > 0):
         print("doesnt like anything, only dislikes :(")
         for i in range(0, badOutfits.__len__()): #was matches
             theseOutfits = [x for x in outfits if x not in badOutfits]
         return theseOutfits
-
-    #old_outfits = clothesMatchesOutfits
     else:
         return clothesMatchesOutfits
 
