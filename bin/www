@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var debug = require('debug')('thecloset');
-var app = require('../datasource');
+var app = require('../app');
 app.configure(function(){
 app.set('port', process.env.PORT || 8081);
 });
