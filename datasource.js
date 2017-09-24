@@ -86,7 +86,7 @@ app.delete('/removeArticle', function(req, res) {
       // Arham: 35.3.66.193
       app.get('/getOutfits', function(req, res) {
         request({
-          url: 'http://35.3.66.193:5000/getOutfits',
+          url: 'http://localhost:5000/getOutfits',
           method: "GET",
         }, function(error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -107,7 +107,7 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
-          url: 'http://35.3.66.193:5000/giveGoodOutfit',
+          url: 'http://localhost:5000/giveGoodOutfit',
           method: "POST",
           json: outfit
         }, function(error, response, body) {
@@ -129,7 +129,7 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
-          url: 'http://35.3.66.193:5000/giveBadOutfit',
+          url: 'http://localhost:5000/giveBadOutfit',
           method: "POST",
           json: outfit
         }, function(error, response, body) {
