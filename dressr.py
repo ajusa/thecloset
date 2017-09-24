@@ -96,10 +96,10 @@ def algorithm(bad, good, liked):
     top_rgb = hex_to_rgb(liked[0]["color"])
     lwr_rgb = hex_to_rgb(liked[1]["color"])
 
-    for i in range(0,outfits.__len__()-1):
-        testTop_rgb = hex_to_rgb(outfits[i]["color"])
+    for i in range(0,outfits.__len__()):
+        testTop_rgb = hex_to_rgb(outfits[i][0]["color"])
         print(testTop_rgb)
-        testLwr_rgb = hex_to_rgb(outfits[i+1]["color"])
+        testLwr_rgb = hex_to_rgb(outfits[i][1]["color"])
         print(testLwr_rgb)
 
         difTop = rgb_dif(top_rgb, testTop_rgb)
