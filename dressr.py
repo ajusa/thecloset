@@ -4,6 +4,7 @@ import csv
 import requests
 from textblob.classifiers import NaiveBayesClassifier
 import collections
+import random
 
 from flask import Flask, jsonify, request
 
@@ -98,14 +99,14 @@ def algorithm(bad, good, liked):
 
     for i in range(0,outfits.__len__()):
         testTop_rgb = hex_to_rgb(outfits[i][0]["color"])
-        print(testTop_rgb)
+        #print(testTop_rgb)
         testLwr_rgb = hex_to_rgb(outfits[i][1]["color"])
-        print(testLwr_rgb)
+        #print(testLwr_rgb)
 
         difTop = rgb_dif(top_rgb, testTop_rgb)
         difLwr = rgb_dif(lwr_rgb, testLwr_rgb)
-        print(difTop)
-        print(difLwr)
+        #print(difTop)
+        #print(difLwr)
 
         if difTop[0] <= 51 and difTop[1] <= 51 and difTop[2] <= 51: #in a good range
             if(good):
@@ -118,6 +119,15 @@ def algorithm(bad, good, liked):
                 clothing_matches.append(outfits[i][1])  # type is top
             if (bad):
                 clothing_matches.insert(0, outfits[i][1])  # type is top
+
+        #style checker
+        if outfits[i][0]["style"] == liked[0][0]["style"] or outfits[i][0]["style"] == liked[0][1]["style"]:
+            clothing_matches.append(outfits[i][0])
+
+        if outfits[i][1]["style"] == liked[0][0]["style"] or outfits[i][1]["style"] == liked[0][1]["style"]:
+            clothing_matches.append(outfits[i][1])
+
+    random.shuffle(clothing_matches)
 
     #now that we have some similar things in clothing_matches...
     for i in range(0, clothing_matches.__len__()):
