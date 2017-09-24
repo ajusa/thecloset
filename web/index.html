@@ -29,13 +29,14 @@
     <div id="app">
         <header class="navbar p2 bg-near-white">
             <section class="fl container">
-                <a href="#" class="btn btn-link tracked b dib">
-                    <span class="purple ttu tracked">Dressr</span>
+                <a href="#" class="btn btn-link b">
+                    <span class="primary ttu tracked">Dressr</span>
                 </a>
+            </section>
         </header>
         <div class="container">
-            <div class="row pt3 cf">
-                <div class="three columns pb4">
+            <div class="row pt4 cf">
+                <div class="three columns">
                     <div class="p3 dim bg-primary white hand">
                         Closet Items
                     </div>
@@ -49,13 +50,13 @@
                 </div>
                 <div class="nine columns">
                     <h3>Add items</h3>
-                    <p>Add clothes that you own. Simply type in the <a href="http://colours.neilorangepeel.com/">color</a> of the clothing, the type (shorts, jeans, t-shirt), andthe styles you wear it (formal, fitness, casual).</p>
+                    <p>Add clothes that you own. Simply type in the <a href="http://colours.neilorangepeel.com/">color</a> of the clothing, the type (shorts, jeans, t-shirt), and the styles you wear it (formal, fitness, casual).</p>
                     <div class="row cf">
                         <div class="four columns">
-                            <input type="text" placeholder="Article" v-model="article">
+                            <input type="text" placeholder="Color" v-model="color">
                         </div>
                         <div class="four columns">
-                            <input type="text" placeholder="Color" v-model="color">
+                            <input type="text" placeholder="Article" v-model="article">
                         </div>
                         <div class="four columns">
                             <input type="checkbox" value="casual" v-model="style">
@@ -90,7 +91,6 @@
     </div>
 </body>
 <script>
-
 var app = new Vue({
     el: '#app',
     created: function() {
