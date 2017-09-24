@@ -56,7 +56,7 @@
                                 <div v-for="article in outfit.sort(function(a,b){if(a.pos=='bottom'){return 1} else return -1})">
                                     <div :style="'font-size: 5rem;color:'+article.color" :class="parsedArticle(article.type).icon"></div>
                                 </div>
-                                <span class="silver">{{outfit[0].style.concat(outfit[1].style).unique().join(", ")}}</span>
+                                <span class="silver">{{outfit[0].style.concat(outfit[1].style).unique().join(" | ")}}</span>
                                 <br>
                                 <!--<i class="icon icon-arrow-up primary hand f4 mh2" @click="newOutfit(outfit, true)"></i>
                                 <i class="icon icon-arrow-down primary hand f4 mh2" @click="newOutfit(outfit, false)"></i>-->
