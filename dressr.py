@@ -66,7 +66,7 @@ def badOutfit():
 def receiveCloset():
     global articles
     articles = request.get_json()
-    print  len(articles)
+    print len(articles)
     return "success"
 
 @app.route("/getOutfits", methods=['GET'])
