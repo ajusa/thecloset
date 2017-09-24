@@ -122,12 +122,18 @@ def algorithm(bad, good, liked):
 
         #style checker
         if outfits[i][0]["style"] == liked[0][0]["style"] or outfits[i][0]["style"] == liked[0][1]["style"]:
-            clothing_matches.append(outfits[i][0])
+            if(good):
+                clothing_matches.append(outfits[i][0])
+            if(bad):
+                clothing_matches.insert(0, outfits[i][0])
 
         if outfits[i][1]["style"] == liked[0][0]["style"] or outfits[i][1]["style"] == liked[0][1]["style"]:
-            clothing_matches.append(outfits[i][1])
+            if (good):
+                clothing_matches.append(outfits[i][1])
+            if (bad):
+                clothing_matches.insert(0, outfits[i][1])
 
-    random.shuffle(clothing_matches)
+    #random.shuffle(clothing_matches)
 
     #now that we have some similar things in clothing_matches...
     for i in range(0, clothing_matches.__len__()):
