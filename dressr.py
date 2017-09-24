@@ -16,10 +16,18 @@ outfits = []
 topColors = []
 bottomColors = []
 outfit = []
-first = 0
+first = 1
 output_outfits = []
 awesomeOutfits = []
 clothesMatchesOutfits = []
+
+liked = []
+badColors = []
+clothingMatches = []
+
+old_outfits = []
+
+articles = []
 
 column = ["topColors", "bottomColors"]
 
@@ -82,17 +90,26 @@ def badOutfit():
        output_outfits = main(True, False, outfit)
     return jsonify(output_outfits)
 
+@app.route("/giveCloset", methods=['PUT'])
+def receiveCloset():
+    articles = request.get_json()
+    return "success"
+
 @app.route("/getOutfits", methods=['GET'])
 def sendAllOutfits():
     return jsonify(createAllOutfits())
 
 def algorithm(bad, good, liked):
-    clothing_matches = []
-    old_clothing_matches = []
+    global clothing_matches
+    global old_outfits
+    global first
+   # global liked
+    global badColors
     testTops = []
     testBottoms = []
     outfits = createAllOutfits()
-    badColors = []
+    #badColors = []
+    badMatches = []
     global clothesMatchesOutfits
     clothesMatchesOutfits = []
 
@@ -100,49 +117,58 @@ def algorithm(bad, good, liked):
     top_rgb = hex_to_rgb(liked[0]["color"])
     lwr_rgb = hex_to_rgb(liked[1]["color"])
 
-    for i in range(0,outfits.__len__()):
+    for i in range(0, outfits.__len__()):
         testTop_rgb = hex_to_rgb(outfits[i][0]["color"])
-        #print(testTop_rgb)
+        # print(testTop_rgb)
         testLwr_rgb = hex_to_rgb(outfits[i][1]["color"])
-        #print(testLwr_rgb)
+        # print(testLwr_rgb)
 
         difTop = rgb_dif(top_rgb, testTop_rgb)
         difLwr = rgb_dif(lwr_rgb, testLwr_rgb)
-        #print(difTop)
-        #print(difLwr)
+        # print(difTop)
+        # print(difLwr)
 
-        if difTop[0] <= 51 and difTop[1] <= 51 and difTop[2] <= 51: #in a good range
-            if(good):
-                clothing_matches.append(outfits[i][0]) #type is top
-            if(bad):
-                #clothing_matches.insert(0, outfits[i][0]) #type is top
-                badColors.append(outfits[i][0])
+        if difTop[0] <= 51 and difTop[1] <= 51 and difTop[2] <= 51:  # in a good range
+            if (good):
+                clothing_matches.append(outfits[i][0])  # type is top
+            if (bad):
+                # clothing_matches.insert(0, outfits[i][0]) #type is top
+                badMatches.append(outfits[i][0])
 
         if difLwr[0] <= 51 and difLwr[1] <= 51 and difLwr[2] <= 51:
             if (good):
                 clothing_matches.append(outfits[i][1])  # type is lwr
             if (bad):
-                #clothing_matches.insert(0, outfits[i][1])  # type is lwr
-                badColors.append(outfits[i][1])
+                # clothing_matches.insert(0, outfits[i][1])  # type is lwr
+                badMatches.append(outfits[i][1]) #was bad colors
 
-
-        #style checker
+        # style checker
         if outfits[i][0]["style"] == liked[0]["style"] or outfits[i][0]["style"] == liked[1]["style"]:
-            if(not clothing_matches.__contains__(outfits[i][0])):
-                if(good):
+            if (not clothing_matches.__contains__(outfits[i][0])):
+                if (good):
                     clothing_matches.append(outfits[i][0])
+                    if (bad):
+                        badMatches.append(outfits[i][0])
 
         if outfits[i][1]["style"] == liked[0]["style"] or outfits[i][1]["style"] == liked[1]["style"]:
             if (not clothing_matches.__contains__(outfits[i][1])):
                 if (good):
                     clothing_matches.append(outfits[i][1])
+                if(bad):
+                    badMatches.append(outfits[i][1])
 
-        if (bad):
-            clothing_matches = old_clothing_matches  # .insert(0, outfits[i][0])
+    # if (bad):
+    #     if first == 1:
+    #         badMatches.append(outfits[i][0])
+    #         badMatches.append(outfits[i][1])
+    #         first = 0
+    #     #clothing_matches = old_clothing_matches  # .insert(0, outfits[i][0])
+      #  outfits.remove(i)
+     #   outfits = old_outfits
 
     #random.shuffle(clothing_matches)
 
-    #now that we have some similar things in clothing_matches...
+    #now that we have some similar things in clothing_matches...START MAKING THE OUTFITS
     for i in range(0, clothing_matches.__len__()):
         pos = clothing_matches[i]['pos']
 
@@ -152,40 +178,52 @@ def algorithm(bad, good, liked):
         elif clothing_matches[i]['pos'] == 'bottom':
             testBottoms.append(clothing_matches[i])
 
-    old_clothing_matches = clothing_matches #store old list
     for i in range(0, testTops.__len__()):
         for j in range(0, testBottoms.__len__()):
             if any(k in testTops[i]['style'] for k in testBottoms[j]['style']):
                 currentOutfit = [testTops[i], testBottoms[j]]
-                if(not clothesMatchesOutfits.__contains__(currentOutfit) and not badColors.__contains__(currentOutfit)):
+
+                if(not clothesMatchesOutfits.__contains__(currentOutfit) and not badColors.__contains__(currentOutfit) and not badMatches.contains(currentOutfit)):
                     clothesMatchesOutfits.append([testTops[i], testBottoms[j]])  # combine tops and bottoms to form all possible outputs
+                #else:
+                    #clothesMatchesOutfits.remove(currentOutfit)
+                #if(badMatches.__sizeof__() > 0):
+                    #add everything NOT in here to the clothesmatchesoutfits frm outfits
+                    #if (badMatches.__contains__(currentOutfit)):
+                       # outfits.remove(currentOutfit)
 
+    if(clothesMatchesOutfits.__len__() == 0 and badMatches.__sizeof__() > 0):
+        for i in range(0, badMatches.__len__()):
+            outfits.remove(badMatches[i])
+        return outfits
 
-    return clothesMatchesOutfits
+    #old_outfits = clothesMatchesOutfits
+    else:
+        return clothesMatchesOutfits
 
 
 def createAllOutfits():
     outfits = []
     tops = []
     bottoms = []
-    articles = requests.get("http://35.3.111.174:3000/getCloset").text
+    global articles
 
     #articles = '[{"color":"#ff0000","pos":"bottom","style":["fitness"],"type":"shorts","uid":"-KuiQ2tqmywx7iTFQvxK"},{"color":"#808080","pos":"top","style":["fitness","casual"],"type":"jacket","uid":"-KuiQXAdz38Y0VmX69d7"}, {"color":"#000080","pos":"bottom","style":["fitness","casual"],"type":"jeans","uid":"-KuiQYoNJy7M28O7dm3s"},{"color":"#000080","pos":"top","style":["fitness","casual"],"type":"t-shirt","uid":"-KuiQb3w3P6o8IGen1QP"},{"color":"#000080","pos":"bottom","style":["casual","fitness"],"type":"shorts","uid":"-KujQqjUeOafKnEuuGVc"},{"color":"#ff0000","pos":"top","style":["casual","formal"],"type":"jacket","uid":"-KujQwRArGAG1hkC04lF"},{"color":"#ff0000","pos":"top","style":["casual","fitness"],"type":"t-shirt","uid":"-KujXsZahvMm3dYhNl_D"},{"color":"#ff0000","pos":"bottom","style":["casual","fitness"],"type":"jeans","uid":"-KujYCmwZ9WxYNYVZq4x"},{"color":"#808080","pos":"top","style":["casual","fitness"],"type":"t-shirt","uid":"-KujYKNXTW9uniEmcwX3"}]'
+    if articles.__len__() > 0: #to make sure request successful
+        outfit = json.loads(articles) #parsedArticles
+        #print(articles)
 
-    outfit = json.loads(articles) #parsedArticles
-    #print(articles)
+        for i in range(0, outfit.__len__()):
+            pos = outfit[i]['pos']
 
-    for i in range(0, outfit.__len__()):
-        pos = outfit[i]['pos']
+            if pos == 'top':
+                tops.append(outfit[i])
 
-        if pos == 'top':
-            tops.append(outfit[i])
+            elif outfit[i]['pos'] == 'bottom':
+                bottoms.append(outfit[i])
 
-        elif outfit[i]['pos'] == 'bottom':
-            bottoms.append(outfit[i])
-
-    for i in range(0, tops.__len__()):
-        for j in range(0, bottoms.__len__()):
-            if any(k in tops[i]['style'] for k in bottoms[j]['style']):
-                outfits.append([tops[i], bottoms[j]]) #combine tops and bottoms to form all possible outputs
+        for i in range(0, tops.__len__()):
+            for j in range(0, bottoms.__len__()):
+                if any(k in tops[i]['style'] for k in bottoms[j]['style']):
+                    outfits.append([tops[i], bottoms[j]]) #combine tops and bottoms to form all possible outputs
     return outfits

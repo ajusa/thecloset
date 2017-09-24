@@ -15,6 +15,7 @@
     <script src="fuse.js"></script>
     <script src="sweetalert2.min.js"></script>
     <script src="one-color.js"></script>
+    <script src="articles.js"></script>
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
     <style>
@@ -76,7 +77,7 @@
                     <br>
                     <div class="row cf" v-for="row in allArticles">
                         <div class="four columns tc" v-for="article in row">
-                            <div class="card p3 mv2 mw6">
+                            <div class="card p3 mv2 mw6 center">
                                 <div :style="'font-size: 5rem;color:'+article.color" :class="parseArticle(article.type).icon"></div>
                                 <p class="silver">{{article.style.join(" | ")}}</p>
                                 <i class="icon icon-cross f5 red mh2 hand" @click="removeArticle(article.uid)">Delete</i>
@@ -89,16 +90,7 @@
     </div>
 </body>
 <script>
-Array.prototype.chunk = function(groupsize) {
-    var sets = [];
-    var chunks = this.length / groupsize;
 
-    for (var i = 0, j = 0; i < chunks; i++, j += groupsize) {
-        sets[i] = this.slice(j, j + groupsize);
-    }
-
-    return sets;
-};
 var app = new Vue({
     el: '#app',
     created: function() {
@@ -108,23 +100,7 @@ var app = new Vue({
         style: [],
         color: "",
         article: "",
-        articles: [{
-                name: "t-shirt",
-                icon: "flaticon-shirt-2"
-            },
-            {
-                name: "jacket",
-                icon: "flaticon-cardigan"
-            },
-            {
-                name: "jeans",
-                icon: "flaticon-jeans-1"
-            },
-            {
-                name: "shorts",
-                icon: "flaticon-swimsuit-1"
-            }
-        ],
+        articles: articles,
         allArticles: [],
     },
     computed: {

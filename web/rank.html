@@ -14,6 +14,7 @@
     <script src="fuse.js"></script>
     <script src="sweetalert2.min.js"></script>
     <script src="one-color.js"></script>
+    <script src="articles.js"></script>
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
     <style>
@@ -49,7 +50,7 @@
                     <p>You can see potential outfits here and rank them based on how much you like them. </p>
                     <div class="row cf" v-for="row in allOutfits">
                         <div class="four columns tc" v-for="outfit in row">
-                            <div class="card p3 mv2 mw6">
+                            <div class="card p3 mv2 mw6 center">
                                 <div v-for="article in outfit.sort(function(a,b){if(a.pos=='bottom'){return 1} else return -1})">
                                     <div :style="'font-size: 5rem;color:'+article.color" :class="parsedArticle(article.type).icon"></div>
                                 </div>
@@ -83,23 +84,7 @@ var app = new Vue({
     data: {
         style: [],
         allOutfits: [],
-        articles: [{
-                name: "t-shirt",
-                icon: "flaticon-shirt-2"
-            },
-            {
-                name: "jacket",
-                icon: "flaticon-cardigan"
-            },
-            {
-                name: "jeans",
-                icon: "flaticon-jeans-1"
-            },
-            {
-                name: "shorts",
-                icon: "flaticon-swimsuit-1"
-            }
-        ],
+        articles: articles,
     },
     computed: {},
     methods: {
