@@ -88,9 +88,11 @@ def sendAllOutfits():
 
 def algorithm(bad, good, liked):
     clothing_matches = []
+    old_clothing_matches = []
     testTops = []
     testBottoms = []
     outfits = createAllOutfits()
+    badColors = []
     global clothesMatchesOutfits
     clothesMatchesOutfits = []
 
@@ -113,28 +115,30 @@ def algorithm(bad, good, liked):
             if(good):
                 clothing_matches.append(outfits[i][0]) #type is top
             if(bad):
-                clothing_matches.insert(0, outfits[i][0]) #type is top
+                #clothing_matches.insert(0, outfits[i][0]) #type is top
+                badColors.append(outfits[i][0])
 
         if difLwr[0] <= 51 and difLwr[1] <= 51 and difLwr[2] <= 51:
             if (good):
-                clothing_matches.append(outfits[i][1])  # type is top
+                clothing_matches.append(outfits[i][1])  # type is lwr
             if (bad):
-                clothing_matches.insert(0, outfits[i][1])  # type is top
+                #clothing_matches.insert(0, outfits[i][1])  # type is lwr
+                badColors.append(outfits[i][1])
+
 
         #style checker
         if outfits[i][0]["style"] == liked[0]["style"] or outfits[i][0]["style"] == liked[1]["style"]:
             if(not clothing_matches.__contains__(outfits[i][0])):
                 if(good):
                     clothing_matches.append(outfits[i][0])
-                if(bad):
-                    clothing_matches.insert(0, outfits[i][0])
 
         if outfits[i][1]["style"] == liked[0]["style"] or outfits[i][1]["style"] == liked[1]["style"]:
             if (not clothing_matches.__contains__(outfits[i][1])):
                 if (good):
                     clothing_matches.append(outfits[i][1])
-                if (bad):
-                    clothing_matches.insert(0, outfits[i][1])
+
+        if (bad):
+            clothing_matches = old_clothing_matches  # .insert(0, outfits[i][0])
 
     #random.shuffle(clothing_matches)
 
@@ -148,12 +152,14 @@ def algorithm(bad, good, liked):
         elif clothing_matches[i]['pos'] == 'bottom':
             testBottoms.append(clothing_matches[i])
 
+    old_clothing_matches = clothing_matches #store old list
     for i in range(0, testTops.__len__()):
         for j in range(0, testBottoms.__len__()):
             if any(k in testTops[i]['style'] for k in testBottoms[j]['style']):
                 currentOutfit = [testTops[i], testBottoms[j]]
-                if(not clothesMatchesOutfits.__contains__(currentOutfit)):
+                if(not clothesMatchesOutfits.__contains__(currentOutfit) and not badColors.__contains__(currentOutfit)):
                     clothesMatchesOutfits.append([testTops[i], testBottoms[j]])  # combine tops and bottoms to form all possible outputs
+
 
     return clothesMatchesOutfits
 
