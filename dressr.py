@@ -20,11 +20,12 @@ first = 1
 output_outfits = []
 awesomeOutfits = []
 clothesMatchesOutfits = []
-
+badMatches = []
 liked = []
-badColors = []
-clothingMatches = []
+#badColors = []
+clothing_matches = []
 
+badOutfits = []
 old_outfits = []
 
 articles = []
@@ -92,7 +93,9 @@ def badOutfit():
 
 @app.route("/giveCloset", methods=['PUT'])
 def receiveCloset():
+    global articles
     articles = request.get_json()
+    print  len(articles)
     return "success"
 
 @app.route("/getOutfits", methods=['GET'])
@@ -104,12 +107,15 @@ def algorithm(bad, good, liked):
     global old_outfits
     global first
    # global liked
-    global badColors
+    #global badColors
     testTops = []
     testBottoms = []
+    badTops = []
+    badBottoms = []
     outfits = createAllOutfits()
     #badColors = []
-    badMatches = []
+    global badMatches
+    global badOutfits
     global clothesMatchesOutfits
     clothesMatchesOutfits = []
 
@@ -131,7 +137,7 @@ def algorithm(bad, good, liked):
         if difTop[0] <= 51 and difTop[1] <= 51 and difTop[2] <= 51:  # in a good range
             if (good):
                 clothing_matches.append(outfits[i][0])  # type is top
-            if (bad):
+            if (bad): #we disliked it
                 # clothing_matches.insert(0, outfits[i][0]) #type is top
                 badMatches.append(outfits[i][0])
 
@@ -169,6 +175,23 @@ def algorithm(bad, good, liked):
     #random.shuffle(clothing_matches)
 
     #now that we have some similar things in clothing_matches...START MAKING THE OUTFITS
+    #make bad outfits!!!!!!!!!!!!!!!
+    for i in range(0, badMatches.__len__()):
+        pos = badMatches[i]['pos']
+
+        if pos == 'top':
+            badTops.append(badMatches[i])
+
+        elif badMatches[i]['pos'] == 'bottom':
+            badBottoms.append(badMatches[i])
+
+    #calculate the bad outfits and exclude them from the thing
+    for i in range(0, badTops.__len__()):
+        for j in range(0, badBottoms.__len__()):
+            if any(k in badTops[i]['style'] for k in badBottoms[j]['style']):
+                badOutfits.append([badTops[i], badBottoms[j]])
+
+    #calculate good outfits
     for i in range(0, clothing_matches.__len__()):
         pos = clothing_matches[i]['pos']
 
@@ -183,7 +206,7 @@ def algorithm(bad, good, liked):
             if any(k in testTops[i]['style'] for k in testBottoms[j]['style']):
                 currentOutfit = [testTops[i], testBottoms[j]]
 
-                if(not clothesMatchesOutfits.__contains__(currentOutfit) and not badColors.__contains__(currentOutfit) and not badMatches.contains(currentOutfit)):
+                if(not currentOutfit in clothesMatchesOutfits and not currentOutfit in badOutfits): #Matches):
                     clothesMatchesOutfits.append([testTops[i], testBottoms[j]])  # combine tops and bottoms to form all possible outputs
                 #else:
                     #clothesMatchesOutfits.remove(currentOutfit)
@@ -192,10 +215,11 @@ def algorithm(bad, good, liked):
                     #if (badMatches.__contains__(currentOutfit)):
                        # outfits.remove(currentOutfit)
 
-    if(clothesMatchesOutfits.__len__() == 0 and badMatches.__sizeof__() > 0):
-        for i in range(0, badMatches.__len__()):
-            outfits.remove(badMatches[i])
-        return outfits
+    if(len(clothesMatchesOutfits) == 0 and badOutfits.__len__()): #Matches.__len__() > 0):
+        print("doesnt like anything, only dislikes :(")
+        for i in range(0, badOutfits.__len__()): #was matches
+            theseOutfits = [x for x in outfits if x not in badOutfits]
+        return theseOutfits
 
     #old_outfits = clothesMatchesOutfits
     else:
@@ -208,11 +232,12 @@ def createAllOutfits():
     bottoms = []
     global articles
 
+    print str(len(articles))
     #articles = '[{"color":"#ff0000","pos":"bottom","style":["fitness"],"type":"shorts","uid":"-KuiQ2tqmywx7iTFQvxK"},{"color":"#808080","pos":"top","style":["fitness","casual"],"type":"jacket","uid":"-KuiQXAdz38Y0VmX69d7"}, {"color":"#000080","pos":"bottom","style":["fitness","casual"],"type":"jeans","uid":"-KuiQYoNJy7M28O7dm3s"},{"color":"#000080","pos":"top","style":["fitness","casual"],"type":"t-shirt","uid":"-KuiQb3w3P6o8IGen1QP"},{"color":"#000080","pos":"bottom","style":["casual","fitness"],"type":"shorts","uid":"-KujQqjUeOafKnEuuGVc"},{"color":"#ff0000","pos":"top","style":["casual","formal"],"type":"jacket","uid":"-KujQwRArGAG1hkC04lF"},{"color":"#ff0000","pos":"top","style":["casual","fitness"],"type":"t-shirt","uid":"-KujXsZahvMm3dYhNl_D"},{"color":"#ff0000","pos":"bottom","style":["casual","fitness"],"type":"jeans","uid":"-KujYCmwZ9WxYNYVZq4x"},{"color":"#808080","pos":"top","style":["casual","fitness"],"type":"t-shirt","uid":"-KujYKNXTW9uniEmcwX3"}]'
     if articles.__len__() > 0: #to make sure request successful
-        outfit = json.loads(articles) #parsedArticles
+        #outfit = json.loads(articles) #parsedArticles
         #print(articles)
-
+        outfit = articles
         for i in range(0, outfit.__len__()):
             pos = outfit[i]['pos']
 
