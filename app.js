@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const request = require('request');
 
+var flaskUrl = 'http://dressr.pythonanywhere.com';
 
 // Initialize Express
 const app = express()
@@ -92,8 +93,8 @@ app.delete('/removeArticle', function(req, res) {
       // Arham: 35.3.66.193
       app.get('/getOutfits', function(req, res) {
         request({
-          url: 'http://localhost:5000/getOutfits',
-          //url: 'http://dressr.pythonanywhere.com/getOutfits',
+          //url: 'http://localhost:5000/getOutfits',
+          url: flaskUrl + '/getOutfits',
           method: "GET",
         }, function(error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -114,8 +115,8 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
-          url: 'http://localhost:5000/giveGoodOutfit',
-          //url: 'http://dressr.pythonanywhere.com/giveGoodOutfit',
+          //url: 'http://localhost:5000/giveGoodOutfit',
+          url: flaskUrl + '/giveGoodOutfit',
           method: "POST",
           json: outfit
         }, function(error, response, body) {
@@ -137,8 +138,8 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
-          url: 'http://localhost:5000/giveBadOutfit',
-          //url: 'http://dressr.pythonanywhere.com/giveBadOutfit',
+          //url: 'http://localhost:5000/giveBadOutfit',
+          url: flaskUrl + '/giveBadOutfit',
           method: "POST",
           json: outfit
         }, function(error, response, body) {
