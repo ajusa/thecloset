@@ -41,7 +41,7 @@ app.get('/getCloset', function(req, res) {
       closet_array.push(articleJSON);
     });
     request({
-      url: 'http://localhost:5000/giveCloset',
+      url: flaskUrl + '/giveCloset',
       method: "PUT",
       json: closet_array
     }, function(error, response, body) {
@@ -93,7 +93,6 @@ app.delete('/removeArticle', function(req, res) {
       // Arham: 35.3.66.193
       app.get('/getOutfits', function(req, res) {
         request({
-          //url: 'http://localhost:5000/getOutfits',
           url: flaskUrl + '/getOutfits',
           method: "GET",
         }, function(error, response, body) {
@@ -115,7 +114,6 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
-          //url: 'http://localhost:5000/giveGoodOutfit',
           url: flaskUrl + '/giveGoodOutfit',
           method: "POST",
           json: outfit
@@ -138,7 +136,6 @@ app.delete('/removeArticle', function(req, res) {
 
         //35.3.12.61
         request({
-          //url: 'http://localhost:5000/giveBadOutfit',
           url: flaskUrl + '/giveBadOutfit',
           method: "POST",
           json: outfit
