@@ -126,7 +126,7 @@ def algorithm(bad, good, liked):
         if pos == 'top':
             testTops.append(clothing_matches[i])
 
-        elif outfit[i]['pos'] == 'bottom':
+        elif clothing_matches[i]['pos'] == 'bottom':
             testBottoms.append(clothing_matches[i])
 
     for i in range(0, testTops.__len__()):
