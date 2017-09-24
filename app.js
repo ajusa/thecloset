@@ -4,8 +4,8 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const request = require('request');
 
-var flaskUrl = 'http://dressr.pythonanywhere.com';
-
+// var flaskUrl = 'https://dressr.pythonanywhere.com';
+var flaskUrl = 'http://localhost:5000';
 // Initialize Express
 const app = express()
 app.use(bodyParser.json()); // for parsing application/json
@@ -40,12 +40,12 @@ app.get('/getCloset', function(req, res) {
       articleJSON['uid'] = key;
       closet_array.push(articleJSON);
     });
+    res.send(closet_array);
     request({
       url: flaskUrl + '/giveCloset',
       method: "PUT",
       json: closet_array
     }, function(error, response, body) {
-        res.send(closet_array);
       })
   });
 })
