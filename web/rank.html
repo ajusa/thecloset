@@ -127,11 +127,20 @@ var app = new Vue({
             }
 
             this.$http.post(url, outfit).then(function(resp) {
-                swal(
-                    'Success!',
-                    'You ranked an outfit',
-                    'success'
-                )
+                if (like) {
+                    swal(
+                        'Success!',
+                        'You liked an outfit',
+                        'success'
+                    )
+                } else {
+                    swal(
+                        'Success!',
+                        'You disliked an outfit',
+                        'success'
+                    )
+                }
+
                 self.allOutfits = JSON.parse(resp.bodyText).reverse().chunk(3)
             }, function() {
                 swal(

@@ -9,7 +9,7 @@ const request = require('request');
 const app = express()
 app.use(bodyParser.json()); // for parsing application/json
 app.use(cors())
-// app.use(express.static('web'))
+app.use(express.static('web'))
 
 // Initialize Firebase
 var config = {
