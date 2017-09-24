@@ -4,6 +4,7 @@ import csv
 import requests
 from textblob.classifiers import NaiveBayesClassifier
 import collections
+import random
 
 from flask import Flask, jsonify, request
 
@@ -18,35 +19,38 @@ outfit = []
 first = 0
 output_outfits = []
 awesomeOutfits = []
+clothesMatchesOutfits = []
 
 column = ["topColors", "bottomColors"]
 
 def main(bad, good, receivedOutfit):
     global awesomeOutfits
 
-    potential = createAllOutfits();
+    #potential = createAllOutfits();
 
-    receivedColorSet = outfitColors(receivedOutfit)
+    #   receivedColorSet = outfitColors(receivedOutfit)
 
-    if(good):
-        train = [(receivedColorSet, 'pos')]
-    if(bad):
-        train = [(receivedColorSet, 'neg')]
-    cl = NaiveBayesClassifier(train)
-
-    affinityMap = {}
-    print "Done with training AI"
-    if (good):
-        for i in range(0, len(potential)):
-            potentialColorSet = outfitColors(potential[i])
-            colorSetProbablities = cl.prob_classify(potentialColorSet)
-            colorSetAffinity = colorSetProbablities.prob('pos')
-            affinityMap.update({str(i):str(colorSetAffinity)})
-            print "index:affinity - " + str(i) + ":" + str(colorSetAffinity)
-        outfitOrder = sorted(affinityMap, key=affinityMap.__getitem__)
-        for i in range(0, len(outfitOrder)):
-            awesomeOutfits.append(potential[int(outfitOrder[i])])
-
+    # if(good):
+    #     train = [(receivedColorSet, 'pos')]
+    # if(bad):
+    #     train = [(receivedColorSet, 'neg')]
+    # cl = NaiveBayesClassifier(train)
+    #
+    # affinityMap = {}
+    # print "Done with training AI"
+    # if (good):
+    #     for i in range(0, len(potential)):
+    #         potentialColorSet = outfitColors(potential[i])
+    #         colorSetProbablities = cl.prob_classify(potentialColorSet)
+    #         colorSetAffinity = colorSetProbablities.prob('pos')
+    #         affinityMap.update({str(i):str(colorSetAffinity)})
+    #         print "index:affinity - " + str(i) + ":" + str(colorSetAffinity)
+    #     outfitOrder = sorted(affinityMap, key=affinityMap.__getitem__)
+    #     for i in range(0, len(outfitOrder)):
+    #         awesomeOutfits.append(potential[int(outfitOrder[i])])
+    #
+    # return awesomeOutfits
+    awesomeOutfits = algorithm(bad, good, receivedOutfit)
     return awesomeOutfits
 
 def outfitColors(outfit):
@@ -82,29 +86,54 @@ def badOutfit():
 def sendAllOutfits():
     return jsonify(createAllOutfits())
 
-def algorithm():
+def algorithm(bad, good, liked):
     clothing_matches = []
     testTops = []
     testBottoms = []
     outfits = createAllOutfits()
-    clothesMatchesOutfits = []
+    global clothesMatchesOutfits
 
-    liked = '[{"type": "shorts", "color": "black", "style": "fancy"}, {"type": "shirt", "color": "blue", "style": "fancy"}]'
-    top_rgb = hex_to_rgb(liked[0][0]["color"])
-    lwr_rgb = hex_to_rgb(liked[0][1]["color"])
+    #liked = '[{"type": "shorts", "color": "black", "style": "fancy"}, {"type": "shirt", "color": "blue", "style": "fancy"}]'
+    top_rgb = hex_to_rgb(liked[0]["color"])
+    lwr_rgb = hex_to_rgb(liked[1]["color"])
 
     for i in range(0,outfits.__len__()):
         testTop_rgb = hex_to_rgb(outfits[i][0]["color"])
+        #print(testTop_rgb)
         testLwr_rgb = hex_to_rgb(outfits[i][1]["color"])
+        #print(testLwr_rgb)
 
         difTop = rgb_dif(top_rgb, testTop_rgb)
         difLwr = rgb_dif(lwr_rgb, testLwr_rgb)
+        #print(difTop)
+        #print(difLwr)
 
-        if difTop[0] < 51 and difTop[1] < 51 and difTop[2] < 51:
-            clothing_matches.append(outfits[i][0]) #type is top
+        if difTop[0] <= 51 and difTop[1] <= 51 and difTop[2] <= 51: #in a good range
+            if(good):
+                clothing_matches.append(outfits[i][0]) #type is top
+            if(bad):
+                clothing_matches.insert(0, outfits[i][0]) #type is top
 
-        if difLwr[0] < 51 and difLwr[1] < 51 and difLwr[2] < 51:
-            clothing_matches.append(outfits[i][1])  # type is bottoms
+        if difLwr[0] <= 51 and difLwr[1] <= 51 and difLwr[2] <= 51:
+            if (good):
+                clothing_matches.append(outfits[i][1])  # type is top
+            if (bad):
+                clothing_matches.insert(0, outfits[i][1])  # type is top
+
+        #style checker
+        if outfits[i][0]["style"] == liked[0][0]["style"] or outfits[i][0]["style"] == liked[0][1]["style"]:
+            if(good):
+                clothing_matches.append(outfits[i][0])
+            if(bad):
+                clothing_matches.insert(0, outfits[i][0])
+
+        if outfits[i][1]["style"] == liked[0][0]["style"] or outfits[i][1]["style"] == liked[0][1]["style"]:
+            if (good):
+                clothing_matches.append(outfits[i][1])
+            if (bad):
+                clothing_matches.insert(0, outfits[i][1])
+
+    #random.shuffle(clothing_matches)
 
     #now that we have some similar things in clothing_matches...
     for i in range(0, clothing_matches.__len__()):
@@ -113,7 +142,7 @@ def algorithm():
         if pos == 'top':
             testTops.append(clothing_matches[i])
 
-        elif outfit[i]['pos'] == 'bottom':
+        elif clothing_matches[i]['pos'] == 'bottom':
             testBottoms.append(clothing_matches[i])
 
     for i in range(0, testTops.__len__()):

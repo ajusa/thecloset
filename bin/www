@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+var debug = require('debug')('thecloset');
+var app = require('../app');
+app.configure(function(){
+app.set('port', process.env.PORT || 8081);
+});
+console.log(app.get('port'));
+var server = app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});

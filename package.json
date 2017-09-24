@@ -1,0 +1,33 @@
+{
+  "name": "dressr",
+  "version": "0.2.0",
+  "description": "A simple webapp for selecting what to wear",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "*",
+    "firebase": "*",
+    "body-parser": "*",
+    "cors":"*",
+    "request":"*"
+  },
+  "engines": {
+    "node": "8.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajusa/thecloset"
+  },
+  "keywords": [
+    "node",
+    "fashion",
+    "webapp"
+  ],
+  "author": "Eashwar Mohan",
+  "contributors": [
+    "Arham Jain <ajusa@gmail.com>",
+    "Lexie Roberts <lexier@umich.edu>"
+  ]
+}
