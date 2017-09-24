@@ -18,7 +18,7 @@ outfit = []
 first = 0
 output_outfits = []
 awesomeOutfits = []
-clothesMatchesOptions = []
+clothesMatchesOutfits = []
 
 column = ["topColors", "bottomColors"]
 
