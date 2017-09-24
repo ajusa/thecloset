@@ -121,13 +121,13 @@ def algorithm(bad, good, liked):
                 clothing_matches.insert(0, outfits[i][1])  # type is top
 
         #style checker
-        if outfits[i][0]["style"] == liked[0][0]["style"] or outfits[i][0]["style"] == liked[0][1]["style"]:
+        if outfits[i][0]["style"] == liked[0]["style"] or outfits[i][0]["style"] == liked[1]["style"]:
             if(good):
                 clothing_matches.append(outfits[i][0])
             if(bad):
                 clothing_matches.insert(0, outfits[i][0])
 
-        if outfits[i][1]["style"] == liked[0][0]["style"] or outfits[i][1]["style"] == liked[0][1]["style"]:
+        if outfits[i][1]["style"] == liked[0]["style"] or outfits[i][1]["style"] == liked[1]["style"]:
             if (good):
                 clothing_matches.append(outfits[i][1])
             if (bad):
