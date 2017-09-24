@@ -49,7 +49,7 @@
                     <p>You can see potential outfits here and rank them based on how much you like them. </p>
                     <div class="row cf" v-for="row in allOutfits">
                         <div class="four columns tc" v-for="outfit in row">
-                            <div class="card p3 mv2 mw6">
+                            <div class="card p3 mv2 mw6 center">
                                 <div v-for="article in outfit.sort(function(a,b){if(a.pos=='bottom'){return 1} else return -1})">
                                     <div :style="'font-size: 5rem;color:'+article.color" :class="parsedArticle(article.type).icon"></div>
                                 </div>
