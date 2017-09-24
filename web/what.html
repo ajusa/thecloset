@@ -14,6 +14,7 @@
     <script src="fuse.js"></script>
     <script src="sweetalert2.min.js"></script>
     <script src="one-color.js"></script>
+    <script src="articles.js"></script>
     <script src="https://s3-us-west-2.amazonaws.com/reallysimpleweather/reallysimpleweather-1.1.0.min.js"></script>
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
@@ -98,23 +99,7 @@ var app = new Vue({
         style: [],
         allOutfits: [],
         temp: "",
-        articles: [{
-                name: "t-shirt",
-                icon: "flaticon-shirt-2"
-            },
-            {
-                name: "jacket",
-                icon: "flaticon-cardigan"
-            },
-            {
-                name: "jeans",
-                icon: "flaticon-jeans-1"
-            },
-            {
-                name: "shorts",
-                icon: "flaticon-swimsuit-1"
-            }
-        ],
+        articles: articles
     },
     computed: {},
     methods: {
