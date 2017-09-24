@@ -39,7 +39,12 @@ app.get('/getCloset', function(req, res) {
       articleJSON['uid'] = key;
       closet_array.push(articleJSON);
     });
-    res.send(closet_array);
+    request({
+      url: 'http://localhost:5000/giveCloset',
+      method: "PUT",
+      json: closet_array
+    }, function(error, response, body) {
+        res.send(closet_array);
   });
 })
 
