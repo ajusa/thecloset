@@ -92,6 +92,7 @@ def algorithm(bad, good, liked):
     testBottoms = []
     outfits = createAllOutfits()
     global clothesMatchesOutfits
+    clothesMatchesOutfits = []
 
     #liked = '[{"type": "shorts", "color": "black", "style": "fancy"}, {"type": "shirt", "color": "blue", "style": "fancy"}]'
     top_rgb = hex_to_rgb(liked[0]["color"])
