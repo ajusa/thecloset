@@ -151,7 +151,8 @@ def algorithm(bad, good, liked):
     for i in range(0, testTops.__len__()):
         for j in range(0, testBottoms.__len__()):
             if any(k in testTops[i]['style'] for k in testBottoms[j]['style']):
-                clothesMatchesOutfits.append([testTops[i], testBottoms[j]])  # combine tops and bottoms to form all possible outputs
+                if(not clothesMatchesOutfits.__contains__(testTops[i], testBottoms[j])):
+                    clothesMatchesOutfits.append([testTops[i], testBottoms[j]])  # combine tops and bottoms to form all possible outputs
 
     return clothesMatchesOutfits
 
