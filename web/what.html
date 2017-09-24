@@ -14,6 +14,8 @@
     <script src="fuse.js"></script>
     <script src="sweetalert2.min.js"></script>
     <script src="one-color.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/reallysimpleweather/reallysimpleweather-1.1.0.min.js"></script>
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
     <style>
     body {
@@ -27,7 +29,7 @@
         <header class="navbar p2 bg-near-white">
             <section class="fl container">
                 <a href="#" class="btn btn-link tracked b dib">
-                    <span class="purple ttu ">The Closet</span>
+                    <span class="purple ttu ">Dressr</span>
                 </a>
         </header>
         <div class="container">
@@ -36,7 +38,7 @@
                     <div class="p3 dim hand" onclick="location.href='/index.html'">
                         Closet Items
                     </div>
-                    <div class="p3 dim  hand" onclick="location.href='/rank.html'">
+                    <div class="p3 dim hand" onclick="location.href='/rank.html'">
                         Rank Styles
                     </div>
                     <div class="p3 dim bg-primary white hand">
@@ -44,17 +46,19 @@
                     </div>
                 </div>
                 <div class="nine columns">
-                    <h3>Rank Styles</h3>
-                    <p>You can see potential outfits here and rank them based on how much you like them. </p>
+                    <h3 class="dib mr3">Wear this today!</h3> <span class="f5 fw4 silver">{{temp}} right now</span>
+                    
+                    <p>Go ahead and select the style you need, and we'll give you some choices that'll be snazzy!</p>
                     <div class="row cf" v-for="row in allOutfits">
                         <div class="four columns tc" v-for="outfit in row">
                             <div class="card p3 mv2 mw6">
                                 <div v-for="article in outfit.sort(function(a,b){if(a.pos=='bottom'){return 1} else return -1})">
                                     <div :style="'font-size: 5rem;color:'+article.color" :class="parsedArticle(article.type).icon"></div>
                                 </div>
+                                <span class="silver">{{outfit[0].style.concat(outfit[1].style).unique().join(", ")}}</span>
                                 <br>
-                                <i class="icon icon-arrow-up primary hand f4 mh2" @click="newOutfit(outfit, true)"></i>
-                                <i class="icon icon-arrow-down primary hand f4 mh2" @click="newOutfit(outfit, false)"></i>
+                                <!--<i class="icon icon-arrow-up primary hand f4 mh2" @click="newOutfit(outfit, true)"></i>
+                                <i class="icon icon-arrow-down primary hand f4 mh2" @click="newOutfit(outfit, false)"></i>-->
                             </div>
                         </div>
                     </div>
@@ -74,6 +78,17 @@ Array.prototype.chunk = function(groupsize) {
 
     return sets;
 };
+Array.prototype.unique = function() {
+    var a = this.concat();
+    for (var i = 0; i < a.length; ++i) {
+        for (var j = i + 1; j < a.length; ++j) {
+            if (a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+};
 var app = new Vue({
     el: '#app',
     created: function() {
@@ -82,6 +97,7 @@ var app = new Vue({
     data: {
         style: [],
         allOutfits: [],
+        temp: "",
         articles: [{
                 name: "t-shirt",
                 icon: "flaticon-shirt-2"
@@ -110,7 +126,7 @@ var app = new Vue({
         updateOutfits: function() {
             var self = this;
             this.$http.get("/getOutfits").then(function(resp) {
-                self.allOutfits = resp.body.reverse().chunk(3)
+                self.allOutfits = JSON.parse(resp.body).reverse().chunk(3)
             })
         },
         parsedArticle: function(type) {
@@ -142,6 +158,19 @@ var app = new Vue({
 
             });
         }
+    }
+})
+reallySimpleWeather.weather({
+    wunderkey: '', // leave blank for Yahoo API
+    location: 'Ann Arbor, MI', //your location here, also works in lat/lon
+    woeid: '', // "Where on Earth ID" optional alternative to location
+    unit: 'f', // 'c' also works
+    success: function(weather) {
+        app.temp = weather.temp + '°' + weather.units.temp
+        //document.getElementById('weather').innerHTML = html;
+    },
+    error: function(error) {
+        //document.getElementById('weather').innerHTML = '<p>'+error+'</p>';
     }
 })
 </script>

@@ -127,10 +127,9 @@ var app = new Vue({
             }
 
             this.$http.post(url, outfit).then(function(resp) {
-                swal("Form Submitted")
                 swal(
                     'Success!',
-                    'You added an outfit',
+                    'You ranked an outfit',
                     'success'
                 )
                 self.allOutfits = JSON.parse(resp.bodyText).reverse().chunk(3)
